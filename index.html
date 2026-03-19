@@ -599,12 +599,26 @@
     }
 
     .marquee-item {
+      display: flex;
+      align-items: center;
       font-family: var(--mono);
       font-size: 0.8rem;
       color: var(--graphite);
       letter-spacing: 0.18em;
       text-transform: uppercase;
       white-space: nowrap;
+    }
+
+    .marquee-item img {
+      height: 28px;
+      width: auto;
+      filter: brightness(0) invert(1);
+      opacity: 0.35;
+      transition: all 0.4s var(--ease);
+    }
+
+    .marquee-item img:hover {
+      opacity: 1;
     }
 
     @keyframes scroll-marquee {
@@ -1713,33 +1727,35 @@
     <div class="marquee-wrap">
       <p class="label marquee-label-row">Confiado por empresas inovadoras:</p>
       <div class="marquee-track">
-        <span class="marquee-item">Empresa Alpha</span>
+        <span class="marquee-item"><img src="logo-ebanx.svg" alt="Ebanx" /></span>
         <span class="marquee-item">///</span>
-        <span class="marquee-item">TechCorp Brasil</span>
+        <span class="marquee-item"><img src="logo-natura.svg" alt="Natura" /></span>
         <span class="marquee-item">///</span>
-        <span class="marquee-item">Nexus Digital</span>
+        <span class="marquee-item"><img src="logo-cocacola.svg" alt="Coca-Cola" /></span>
         <span class="marquee-item">///</span>
-        <span class="marquee-item">Horizon SaaS</span>
+        <span class="marquee-item"><img src="logo-rdstation.svg" alt="RD Station" /></span>
         <span class="marquee-item">///</span>
-        <span class="marquee-item">ScaleUp Co.</span>
+        <span class="marquee-item"><img src="logo-unicef.svg" alt="Unicef" /></span>
         <span class="marquee-item">///</span>
-        <span class="marquee-item">InnovateLab</span>
+        <span class="marquee-item"><img src="logo-ebanx.svg" alt="Ebanx" /></span>
         <span class="marquee-item">///</span>
-        <span class="marquee-item">Vertex Systems</span>
+        <span class="marquee-item"><img src="logo-natura.svg" alt="Natura" /></span>
         <span class="marquee-item">///</span>
-        <span class="marquee-item">Empresa Alpha</span>
+        <span class="marquee-item"><img src="logo-cocacola.svg" alt="Coca-Cola" /></span>
         <span class="marquee-item">///</span>
-        <span class="marquee-item">TechCorp Brasil</span>
+        <span class="marquee-item"><img src="logo-rdstation.svg" alt="RD Station" /></span>
         <span class="marquee-item">///</span>
-        <span class="marquee-item">Nexus Digital</span>
+        <span class="marquee-item"><img src="logo-unicef.svg" alt="Unicef" /></span>
         <span class="marquee-item">///</span>
-        <span class="marquee-item">Horizon SaaS</span>
+        <span class="marquee-item"><img src="logo-ebanx.svg" alt="Ebanx" /></span>
         <span class="marquee-item">///</span>
-        <span class="marquee-item">ScaleUp Co.</span>
+        <span class="marquee-item"><img src="logo-natura.svg" alt="Natura" /></span>
         <span class="marquee-item">///</span>
-        <span class="marquee-item">InnovateLab</span>
+        <span class="marquee-item"><img src="logo-cocacola.svg" alt="Coca-Cola" /></span>
         <span class="marquee-item">///</span>
-        <span class="marquee-item">Vertex Systems</span>
+        <span class="marquee-item"><img src="logo-rdstation.svg" alt="RD Station" /></span>
+        <span class="marquee-item">///</span>
+        <span class="marquee-item"><img src="logo-unicef.svg" alt="Unicef" /></span>
         <span class="marquee-item">///</span>
       </div>
     </div>
