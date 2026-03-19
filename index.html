@@ -1467,6 +1467,79 @@
       color: var(--graphite);
     }
 
+    /* ══ GLITCH EFFECT ══ */
+    @keyframes glitch-anim {
+      0%, 100% {
+        transform: translate(0);
+        text-shadow: none;
+      }
+
+      8% {
+        transform: translate(-5px, 0);
+        text-shadow: 5px 0 rgba(218, 32, 55, 0.9);
+      }
+
+      16% {
+        transform: translate(5px, 0);
+        text-shadow: -5px 0 rgba(249, 201, 114, 0.9);
+      }
+
+      24% {
+        transform: translate(-3px, 1px);
+        text-shadow: 3px 0 rgba(218, 32, 55, 0.75), -3px 0 rgba(245, 111, 16, 0.75);
+      }
+
+      32% {
+        transform: translate(4px, -1px);
+        text-shadow: -4px 0 rgba(218, 32, 55, 0.65);
+      }
+
+      40% {
+        transform: translate(-2px, 0);
+        text-shadow: 3px 0 rgba(249, 201, 114, 0.55);
+      }
+
+      48% {
+        transform: translate(0);
+        text-shadow: none;
+      }
+
+      56% {
+        transform: translate(-1px, 0);
+        text-shadow: 2px 0 rgba(218, 32, 55, 0.4);
+      }
+
+      64% {
+        transform: translate(2px, 0);
+        text-shadow: -2px 0 rgba(249, 201, 114, 0.35);
+      }
+
+      72% {
+        transform: translate(0);
+        text-shadow: none;
+      }
+    }
+
+    .glitching {
+      animation: glitch-anim 0.38s steps(6) forwards;
+    }
+
+    /* ══ SECTION TITLE BLINKING CURSOR ══ */
+    .section-title::after {
+      content: '█';
+      font-family: var(--pixel);
+      font-size: 0.58em;
+      color: var(--gold);
+      margin-left: 10px;
+      vertical-align: middle;
+      display: inline;
+      opacity: 0;
+    }
+
+    .section-title.cursor-active::after {
+      animation: blink 1s step-end infinite;
+    }
+
     /* ══ REDUCED MOTION ══ */
     @media (prefers-reduced-motion: reduce) {
 
@@ -1491,6 +1564,14 @@
       }
 
       #loader {
+        display: none;
+      }
+
+      .glitching {
+        animation: none;
+      }
+
+      .section-title::after {
         display: none;
       }
     }
@@ -2541,6 +2622,123 @@
         }, 100);
       }
     });
+
+    /* ═══════════════════════════════════════════
+       11. GLITCH EFFECT SYSTEM
+       Áreas recomendadas:
+         • h1/h2 de seção — maior impacto visual
+         • .label (prefixos // estilo terminal)
+         • .err-badge ([ ERR: ... ]) — tema de erro reforça o efeito
+         • .phase-tag ([ FASE_0X ]) — estética de código
+         • .warn-tag ([ WARN: ... ]) — tensão dramática
+         • .bento-num — números grandes como dados corrompidos
+         • .guia-caption h3 — caixa visual do guia
+         • .nav-link — personalidade sutil na nav
+    ═══════════════════════════════════════════ */
+    if (!prefersReducedMotion) {
+      function triggerGlitch(el) {
+        if (!el || el.classList.contains('glitching')) return;
+        el.classList.add('glitching');
+        const cleanup = () => el.classList.remove('glitching');
+        el.addEventListener('animationend', cleanup, { once: true });
+        setTimeout(cleanup, 600); /* fallback */
+      }
+
+      /* Pool of elements eligible for periodic glitch */
+      const glitchPool = [
+        ...document.querySelectorAll(
+          '.label, .err-badge, .phase-tag, .warn-tag, .bento-num, .guia-caption h3, .nav-link'
+        )
+      ];
+
+      /* Headings: glitch on-reveal + periodic */
+      const glitchHeadings = [
+        document.querySelector('h1.hero-h'),
+        document.querySelector('#problema .prob-left h2'),
+        document.querySelector('#guia h2'),
+        document.querySelector('#plano .plano-header h2'),
+        document.querySelector('#resultados .res-success h2'),
+        document.querySelector('#social .social-header h2'),
+        document.querySelector('#cta-final .cta-h'),
+      ].filter(Boolean);
+
+      /* Glitch-on-reveal: brief glitch when a heading first enters viewport */
+      const glitchRevealObs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !entry.target.dataset.glitchSeen) {
+            entry.target.dataset.glitchSeen = '1';
+            setTimeout(() => triggerGlitch(entry.target), 280);
+          }
+        });
+      }, { threshold: 0.25 });
+
+      glitchHeadings.forEach(el => glitchRevealObs.observe(el));
+
+      /* Periodic random glitch on visible elements */
+      function scheduleGlitch() {
+        const allTargets = [...glitchPool, ...glitchHeadings];
+        const visible = allTargets.filter(el => {
+          const r = el.getBoundingClientRect();
+          return r.top < window.innerHeight && r.bottom > 0;
+        });
+
+        if (visible.length > 0) {
+          triggerGlitch(visible[Math.floor(Math.random() * visible.length)]);
+
+          /* 28% chance of a rapid double-glitch on a second element */
+          if (Math.random() < 0.28 && visible.length > 1) {
+            const second = visible[Math.floor(Math.random() * visible.length)];
+            setTimeout(() => triggerGlitch(second), 90 + Math.random() * 110);
+          }
+        }
+
+        setTimeout(scheduleGlitch, 2200 + Math.random() * 4200);
+      }
+
+      /* Start after entrance animations settle */
+      setTimeout(scheduleGlitch, 4500);
+    }
+
+    /* ═══════════════════════════════════════════
+       12. SECTION TITLE BLINKING CURSOR
+       Quando uma seção está ativa, o título recebe
+       um cursor █ piscante — como se o texto
+       acabasse de ser digitado naquele instante.
+    ═══════════════════════════════════════════ */
+    if (!prefersReducedMotion) {
+      const sectionTitleMap = {
+        'hero':       document.querySelector('#hero h1'),
+        'problema':   document.querySelector('#problema .prob-left h2'),
+        'guia':       document.querySelector('#guia h2'),
+        'plano':      document.querySelector('#plano .plano-header h2'),
+        'resultados': document.querySelector('#resultados .res-success h2'),
+        'social':     document.querySelector('#social .social-header h2'),
+        'cta-final':  document.querySelector('#cta-final .cta-h'),
+      };
+
+      /* Mark all section titles */
+      Object.values(sectionTitleMap).forEach(el => {
+        if (el) el.classList.add('section-title');
+      });
+
+      /* Same rootMargin as sectionObs so cursor tracks active section */
+      const titleCursorObs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          const titleEl = sectionTitleMap[entry.target.id];
+          if (!titleEl) return;
+          if (entry.isIntersecting) {
+            titleEl.classList.add('cursor-active');
+          } else {
+            titleEl.classList.remove('cursor-active');
+          }
+        });
+      }, { threshold: 0, rootMargin: '-45% 0px -45% 0px' });
+
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) titleCursorObs.observe(el);
+      });
+    }
   </script>
 </body>
 
