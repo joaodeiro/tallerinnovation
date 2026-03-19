@@ -557,11 +557,28 @@
     }
 
     .marquee-item img {
-      height: 28px;
+      height: 30px;
       width: auto;
       filter: brightness(0) invert(1);
       opacity: 0.35;
       transition: all 0.4s var(--ease);
+    }
+
+    .marquee-item img[src*="ebanx"] {
+      height: 20px;
+    }
+
+    .marquee-item img[src*="rdstation"] {
+      height: 22px;
+    }
+
+    .marquee-item img[src*="unicef"] {
+      height: 36px;
+    }
+
+    .marquee-item img[src*="natura"] {
+      height: 52px;
+      transform: translateY(-2px);
     }
 
     .marquee-item img:hover {
