@@ -581,10 +581,13 @@
 
     /* marquee */
     .marquee-wrap {
-      position: relative;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
       z-index: 3;
       border-top: var(--border);
-      padding: 20px 0;
+      padding: 20px 0 32px 0;
       overflow: hidden;
       mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
     }
@@ -713,7 +716,6 @@
 
     /* shimmer border */
     .err-card::before,
-    .bento-card::before,
     .tcard::before {
       content: '';
       position: absolute;
@@ -728,7 +730,6 @@
     }
 
     .err-card:hover::before,
-    .bento-card:hover::before,
     .tcard:hover::before {
       opacity: 1;
       animation: shimmer 0.9s var(--ease) forwards;
@@ -901,20 +902,7 @@
       position: relative;
     }
 
-    .bento::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(500px circle at var(--bx, 50%) var(--by, 50%), rgba(232, 232, 232, 0.045), transparent 50%);
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
 
-    .bento:hover::after {
-      opacity: 1;
-    }
 
     .bento-card {
       background: var(--carbon);
