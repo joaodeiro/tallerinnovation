@@ -17,6 +17,9 @@
       --black: #000000;
       --carbon: #1B1B1D;
       --gold: #F9C972;
+      --flame: #DA2037;
+      --solar: #F56F10;
+      --heat: #E64C28;
       --white: #FFFFFF;
       --silver: #E8E8E8;
       --graphite: #878787;
@@ -201,21 +204,17 @@
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 201;
-      font-family: var(--mono);
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 0.2em;
-      white-space: nowrap;
       transition: opacity 0.35s ease;
+    }
+
+    .loader-logo img {
+      height: 48px;
+      width: auto;
+      display: block;
     }
 
     #loader.done .loader-logo {
       opacity: 0;
-    }
-
-    .loader-logo .dot {
-      color: var(--gold);
     }
 
     /* ══ CUSTOM CURSOR ══ */
@@ -314,24 +313,26 @@
     }
 
     .btn-gold {
-      background: var(--gold);
+      background: linear-gradient(90deg, var(--solar), var(--gold));
       color: var(--black);
       animation: glow-pulse 3s ease-in-out infinite;
     }
 
     .btn-gold:hover {
-      box-shadow: 0 0 0 1px var(--gold), 0 0 30px rgba(249, 201, 114, 0.25);
+      background: linear-gradient(90deg, var(--heat), var(--solar));
+      color: var(--white);
+      box-shadow: 0 0 0 1px var(--solar), 0 0 30px rgba(245, 111, 16, 0.45);
     }
 
     @keyframes glow-pulse {
 
       0%,
       100% {
-        box-shadow: 0 0 12px rgba(249, 201, 114, 0.12);
+        box-shadow: 0 0 12px rgba(245, 111, 16, 0.25);
       }
 
       50% {
-        box-shadow: 0 0 28px rgba(249, 201, 114, 0.28), 0 0 56px rgba(249, 201, 114, 0.08);
+        box-shadow: 0 0 28px rgba(245, 111, 16, 0.45), 0 0 56px rgba(249, 201, 114, 0.2);
       }
     }
 
@@ -378,15 +379,15 @@
     }
 
     .nav-logo {
-      font-family: var(--mono);
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--white);
-      letter-spacing: 0.12em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .nav-logo .dot {
-      color: var(--gold);
+    .nav-logo img {
+      height: 28px;
+      width: auto;
+      display: block;
     }
 
     .nav-link {
@@ -445,8 +446,8 @@
 
     /* ══ GOLD HIGHLIGHT SWEEP ══ */
     .gold {
-      color: var(--gold);
-      background: linear-gradient(var(--gold), var(--gold)) no-repeat left bottom;
+      color: var(--solar);
+      background: linear-gradient(90deg, var(--solar), var(--gold)) no-repeat left bottom;
       background-size: 0% 2px;
       transition: background-size 0.8s var(--ease);
       padding-bottom: 2px;
@@ -1405,7 +1406,7 @@
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      background: var(--gold);
+      background: linear-gradient(90deg, var(--solar), var(--gold));
       color: var(--black);
       font-family: var(--mono);
       font-weight: 700;
@@ -1421,7 +1422,9 @@
     }
 
     .btn-final:hover {
-      box-shadow: 0 0 60px rgba(249, 201, 114, 0.45), 0 0 120px rgba(249, 201, 114, 0.2);
+      background: linear-gradient(90deg, var(--heat), var(--solar));
+      color: var(--white);
+      box-shadow: 0 0 60px rgba(245, 111, 16, 0.45), 0 0 120px rgba(245, 111, 16, 0.2);
       transform: scale(1.03);
     }
 
@@ -1475,13 +1478,23 @@
     }
 
     .footer-logo {
-      font-family: var(--mono);
-      font-size: 0.82rem;
-      color: var(--graphite);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.6;
+      filter: grayscale(100%);
+      transition: all 0.4s var(--ease);
     }
 
-    .footer-logo .dot {
-      color: var(--gold);
+    .footer-logo:hover {
+      opacity: 1;
+      filter: grayscale(0%);
+    }
+
+    .footer-logo img {
+      height: 20px;
+      width: auto;
+      display: block;
     }
 
     .footer-copy {
@@ -1633,7 +1646,7 @@
   <div id="loader" class="active">
     <div class="loader-half loader-left"></div>
     <div class="loader-half loader-right"></div>
-    <div class="loader-logo">TALLER<span class="dot">_</span>INNOVATION</div>
+    <div class="loader-logo"><img src="logo.svg" alt="Taller Innovation" /></div>
   </div>
 
   <!-- SCROLL PROGRESS -->
@@ -1656,7 +1669,9 @@
 
   <!-- NAV -->
   <nav>
-    <span class="nav-logo">TALLER<span class="dot">_</span>INNOVATION</span>
+    <a href="#hero" class="nav-logo" aria-label="Taller Innovation">
+      <img src="logo.svg" alt="Taller Innovation" />
+    </a>
     <a href="#cta-final" class="nav-link">[ FALAR COM ESPECIALISTA ]</a>
   </nav>
 
@@ -2008,7 +2023,10 @@
 
   <!-- FOOTER -->
   <footer>
-    <span class="footer-logo">TALLER<span class="dot">_</span>INNOVATION © 2026</span>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="footer-logo"><img src="logo.svg" alt="Taller Innovation" /></span>
+      <span class="footer-copy" style="opacity: 0.6">© 2026</span>
+    </div>
     <span class="footer-copy">// Future Relics — Taller '26</span>
   </footer>
 
