@@ -1,0 +1,133 @@
+/* ── Taller Innovation — Button Design System ── */
+@import './tokens/design-tokens.css';
+
+/* ── Storybook canvas dark background ── */
+.sb-show-main.sb-main-padded {
+  background: #000;
+}
+
+/* ─────────────── Base ─────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  padding: 14px 28px;
+  border-radius: 50px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background 0.3s var(--ease),
+    color 0.3s var(--ease),
+    box-shadow 0.3s var(--ease),
+    border-color 0.3s var(--ease),
+    opacity 0.3s var(--ease);
+}
+
+/* ─────────────── Sizes ─────────────── */
+.btn-mini { padding: 6px 14px;   font-size: 0.72rem; }
+.btn-sm   { padding: 10px 22px;  font-size: 0.78rem; }
+/* default = md: 14px 28px / 0.85rem */
+.btn-lg   { padding: 16px 36px;  font-size: 0.92rem; }
+.btn-xl   { padding: 20px 48px;  font-size: 1rem;    }
+
+/* ─────────────── Primary ─────────────── */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 16px rgba(230, 76, 40, 0.3), 0 0 40px rgba(218, 32, 55, 0.1); }
+  50%       { box-shadow: 0 0 28px rgba(230, 76, 40, 0.5), 0 0 64px rgba(218, 32, 55, 0.25); }
+}
+
+.btn-primary {
+  background: var(--heat-gradient);
+  color: var(--white);
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+.btn-primary:hover,
+.btn-primary:active {
+  background: linear-gradient(90deg, var(--flame), #b01a20);
+  box-shadow: 0 0 0 1.5px var(--heat), 0 0 32px rgba(230, 76, 40, 0.45);
+}
+.btn-primary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(230, 76, 40, 0.55);
+}
+.btn-primary:disabled {
+  background: linear-gradient(90deg, rgba(230,76,40,.35), rgba(218,32,55,.35));
+  color: rgba(255,255,255,0.45);
+  box-shadow: none;
+  animation: none;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* ─────────────── Alternate ─────────────── */
+.btn-alternate {
+  background: #111;
+  color: var(--white);
+  border-color: rgba(135,135,135,0.25);
+}
+.btn-alternate:hover,
+.btn-alternate:active {
+  background: #1e1e1e;
+  border-color: rgba(135,135,135,0.5);
+  box-shadow: 0 0 0 1px rgba(135,135,135,0.25);
+}
+.btn-alternate:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(135, 135, 135, 0.45);
+}
+.btn-alternate:disabled {
+  background: #0a0a0a;
+  color: rgba(255,255,255,0.3);
+  border-color: rgba(135,135,135,0.1);
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* ─────────────── Secondary (outline) ─────────────── */
+.btn-secondary {
+  background: transparent;
+  color: var(--silver);
+  border-color: rgba(135,135,135,0.45);
+}
+.btn-secondary:hover,
+.btn-secondary:active {
+  background: rgba(135,135,135,0.08);
+  border-color: rgba(135,135,135,0.7);
+}
+.btn-secondary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(135, 135, 135, 0.35);
+}
+.btn-secondary:disabled {
+  color: rgba(232,232,232,0.3);
+  border-color: rgba(135,135,135,0.2);
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* ─────────────── Alert ─────────────── */
+.btn-alert {
+  background: #b71c2e;
+  color: var(--white);
+}
+.btn-alert:hover,
+.btn-alert:active {
+  background: #d4202f;
+  box-shadow: 0 0 0 1.5px #b71c2e, 0 0 24px rgba(183, 28, 46, 0.4);
+}
+.btn-alert:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(183, 28, 46, 0.55);
+}
+.btn-alert:disabled {
+  background: rgba(183,28,46,.35);
+  color: rgba(255,255,255,0.45);
+  pointer-events: none;
+  cursor: not-allowed;
+}

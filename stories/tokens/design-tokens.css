@@ -1,0 +1,24 @@
+/* Taller Innovation — Design Tokens */
+:root {
+  --black:      #000000;
+  --carbon:     #1B1B1D;
+  --heat:       #E64C28;
+  --flame:      #DA2037;
+  --gold:       #F9C972;
+  --white:      #FFFFFF;
+  --silver:     #E8E8E8;
+  --graphite:   #878787;
+  --graphite-30: rgba(135, 135, 135, 0.3);
+
+  --heat-gradient: linear-gradient(90deg, var(--heat) 0%, var(--flame) 37%, var(--gold) 100%);
+
+  --mono:  'Geist Mono', 'JetBrains Mono', monospace;
+  --ease:  cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --border: 1px solid var(--graphite-30);
+}
+
+/* Storybook dark background for LP context */
+.sb-show-main {
+  background: #000;
+  padding: 32px;
+}
