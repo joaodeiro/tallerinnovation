@@ -33,6 +33,7 @@
       --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
       --ease-curtain: cubic-bezier(0.76, 0, 0.24, 1);
       --border: 1px solid var(--graphite-30);
+      --heat-gradient: linear-gradient(90deg, var(--heat) 0%, var(--flame) 37%, var(--gold) 100%);
     }
 
     *,
@@ -91,19 +92,13 @@
       letter-spacing: 0.08em;
     }
 
-    .gold {
-      color: var(--gold);
-    }
-
-
-
     /* ══ SCROLL PROGRESS BAR ══ */
     #scroll-progress {
       position: fixed;
       top: 0;
       left: 0;
       height: 2px;
-      background: var(--gold);
+      background: var(--heat-gradient);
       z-index: 102;
       transform-origin: left;
       transform: scaleX(0);
@@ -233,7 +228,7 @@
 
     .snav-dot.active {
       height: 28px;
-      background: var(--gold);
+      background: var(--heat);
     }
 
     /* ══ BUTTONS ══ */
@@ -248,32 +243,31 @@
       padding: 15px 30px;
       border-radius: 2px;
       cursor: none;
-      transition: all 0.4s var(--ease);
+      transition: background 0.35s var(--ease), color 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s var(--ease);
       border: none;
-      will-change: transform;
     }
 
     .btn-gold {
-      background: linear-gradient(90deg, var(--solar), var(--gold));
+      background: var(--heat-gradient);
       color: var(--black);
       animation: glow-pulse 3s ease-in-out infinite;
     }
 
     .btn-gold:hover {
-      background: linear-gradient(90deg, var(--heat), var(--solar));
+      background: linear-gradient(90deg, var(--flame), var(--heat));
       color: var(--white);
-      box-shadow: 0 0 0 1px var(--solar), 0 0 30px rgba(245, 111, 16, 0.45);
+      box-shadow: 0 0 0 1px var(--heat), 0 0 30px rgba(230, 76, 40, 0.45);
     }
 
     @keyframes glow-pulse {
 
       0%,
       100% {
-        box-shadow: 0 0 12px rgba(245, 111, 16, 0.25);
+        box-shadow: 0 0 12px rgba(230, 76, 40, 0.25);
       }
 
       50% {
-        box-shadow: 0 0 28px rgba(245, 111, 16, 0.45), 0 0 56px rgba(249, 201, 114, 0.2);
+        box-shadow: 0 0 28px rgba(230, 76, 40, 0.5), 0 0 56px rgba(218, 32, 55, 0.2);
       }
     }
 
@@ -286,16 +280,18 @@
     .btn-outline:hover {
       border-color: var(--silver);
       color: var(--white);
+      background: rgba(255, 255, 255, 0.04);
     }
 
     .bracket {
       font-family: var(--pixel);
       font-size: 1.1rem;
-      display: none;
+      opacity: 0;
+      transition: opacity 0.3s var(--ease);
     }
 
     .btn-gold:hover .bracket {
-      display: inline;
+      opacity: 1;
     }
 
     /* ══ NAV ══ */
@@ -383,10 +379,10 @@
       opacity: 1;
     }
 
-    /* ══ GOLD HIGHLIGHT SWEEP ══ */
+    /* ══ HEAT HIGHLIGHT SWEEP ══ */
     .gold {
-      color: var(--solar);
-      background: linear-gradient(90deg, var(--solar), var(--gold)) no-repeat left bottom;
+      color: var(--heat);
+      background: linear-gradient(90deg, var(--heat), var(--gold)) no-repeat left bottom;
       background-size: 0% 2px;
       transition: background-size 0.8s var(--ease);
       padding-bottom: 2px;
@@ -670,31 +666,41 @@
       transition-delay: 0.24s;
     }
 
-    /* shimmer border */
-    .err-card::before,
-    .tcard::before {
+    /* err-card: scan-line top edge + subtle heat tint on hover */
+    .err-card {
+      transition: opacity 0.8s var(--ease), transform 0.8s var(--ease), background 0.4s var(--ease), border-color 0.4s var(--ease);
+    }
+
+    .err-card::before {
       content: '';
       position: absolute;
-      inset: -1px;
-      border-radius: 2px;
-      background: linear-gradient(90deg, transparent 30%, rgba(249, 201, 114, 0.5) 50%, transparent 70%);
-      background-size: 200% 100%;
-      background-position: -200% 0;
-      z-index: -1;
-      opacity: 0;
-      transition: opacity 0.3s;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(230, 76, 40, 0.8), var(--flame), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.55s var(--ease);
+      z-index: 2;
     }
 
-    .err-card:hover::before,
-    .tcard:hover::before {
-      opacity: 1;
-      animation: shimmer 0.9s var(--ease) forwards;
+    .err-card:hover {
+      background: rgba(230, 76, 40, 0.04);
+      border-color: rgba(230, 76, 40, 0.32);
     }
 
-    @keyframes shimmer {
-      to {
-        background-position: 200% 0;
-      }
+    .err-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .err-badge {
+      transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+    }
+
+    .err-card:hover .err-badge {
+      color: rgba(230, 76, 40, 0.85);
+      border-color: rgba(230, 76, 40, 0.45);
     }
 
     .err-badge {
@@ -795,7 +801,7 @@
       right: 36px;
       width: 56px;
       height: 56px;
-      border: 2px solid var(--gold);
+      border: 2px solid var(--heat);
       transform: rotate(45deg);
       opacity: 0.55;
     }
@@ -868,13 +874,32 @@
       z-index: 1;
       opacity: 0;
       transform: translateY(18px);
-      transition: opacity 0.8s var(--ease), transform 0.8s var(--ease-spring);
-      will-change: transform;
+      transition: opacity 0.8s var(--ease), transform 0.8s var(--ease-spring), background 0.4s var(--ease);
     }
 
     .bento-card.in {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    /* cursor-tracked radial spotlight */
+    .bento-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        120px circle at var(--cx, 50%) var(--cy, 50%),
+        rgba(230, 76, 40, 0.09),
+        transparent 70%
+      );
+      opacity: 0;
+      transition: opacity 0.4s var(--ease);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bento-card:hover::after {
+      opacity: 1;
     }
 
     .bento-num {
@@ -901,6 +926,11 @@
       letter-spacing: 0.08em;
       display: block;
       margin-bottom: 14px;
+      transition: color 0.3s var(--ease);
+    }
+
+    .bento-card:hover .phase-tag {
+      color: var(--heat);
     }
 
     .bento-card h3 {
@@ -1066,8 +1096,46 @@
       padding: 52px 44px;
       position: relative;
       overflow: hidden;
-      will-change: transform;
-      transition: transform 0.4s var(--ease);
+      transition: background 0.4s var(--ease);
+    }
+
+    /* scan-line top edge */
+    .tcard::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--heat), var(--gold), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.6s var(--ease);
+      z-index: 2;
+    }
+
+    /* diagonal heat glow from top-left */
+    .tcard::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(230, 76, 40, 0.055) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity 0.5s var(--ease);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .tcard:hover::before {
+      transform: scaleX(1);
+    }
+
+    .tcard:hover::after {
+      opacity: 1;
+    }
+
+    .tcard:hover .tcard-text {
+      color: var(--white);
     }
 
     .tcard-quote {
@@ -1088,6 +1156,7 @@
       margin-bottom: 36px;
       position: relative;
       z-index: 1;
+      transition: color 0.4s var(--ease);
     }
 
     .tcard-author {
@@ -1368,7 +1437,7 @@
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      background: linear-gradient(90deg, var(--solar), var(--gold));
+      background: var(--heat-gradient);
       color: var(--black);
       font-family: var(--mono);
       font-weight: 700;
@@ -1378,16 +1447,15 @@
       border-radius: 2px;
       cursor: none;
       border: none;
-      transition: all 0.5s var(--ease);
+      transition: background 0.5s var(--ease), color 0.5s var(--ease), box-shadow 0.5s var(--ease);
       will-change: transform;
       animation: glow-pulse 3s ease-in-out infinite;
     }
 
     .btn-final:hover {
-      background: linear-gradient(90deg, var(--heat), var(--solar));
+      background: linear-gradient(90deg, var(--flame), var(--heat));
       color: var(--white);
-      box-shadow: 0 0 60px rgba(245, 111, 16, 0.45), 0 0 120px rgba(245, 111, 16, 0.2);
-      transform: scale(1.03);
+      box-shadow: 0 0 60px rgba(230, 76, 40, 0.5), 0 0 120px rgba(218, 32, 55, 0.2);
     }
 
     /* dark veil */
@@ -1467,77 +1535,31 @@
 
     /* ══ GLITCH EFFECT ══ */
     @keyframes glitch-anim {
-      0%, 100% {
-        transform: translate(0);
-        text-shadow: none;
-      }
-
-      8% {
-        transform: translate(-5px, 0);
-        text-shadow: 5px 0 rgba(218, 32, 55, 0.9);
-      }
-
-      16% {
-        transform: translate(5px, 0);
-        text-shadow: -5px 0 rgba(249, 201, 114, 0.9);
-      }
-
-      24% {
-        transform: translate(-3px, 1px);
-        text-shadow: 3px 0 rgba(218, 32, 55, 0.75), -3px 0 rgba(245, 111, 16, 0.75);
-      }
-
-      32% {
-        transform: translate(4px, -1px);
-        text-shadow: -4px 0 rgba(218, 32, 55, 0.65);
-      }
-
-      40% {
-        transform: translate(-2px, 0);
-        text-shadow: 3px 0 rgba(249, 201, 114, 0.55);
-      }
-
-      48% {
-        transform: translate(0);
-        text-shadow: none;
-      }
-
-      56% {
-        transform: translate(-1px, 0);
-        text-shadow: 2px 0 rgba(218, 32, 55, 0.4);
-      }
-
-      64% {
-        transform: translate(2px, 0);
-        text-shadow: -2px 0 rgba(249, 201, 114, 0.35);
-      }
-
-      72% {
-        transform: translate(0);
-        text-shadow: none;
-      }
+      0%, 100% { transform: translate(0); text-shadow: none; }
+      15% { transform: translate(-3px, 0); text-shadow: 3px 0 rgba(218, 32, 55, 0.55); }
+      30% { transform: translate(3px, 0); text-shadow: -3px 0 rgba(249, 201, 114, 0.4); }
+      45% { transform: translate(-2px, 1px); text-shadow: 2px 0 rgba(218, 32, 55, 0.4); }
+      60% { transform: translate(2px, -1px); text-shadow: -2px 0 rgba(218, 32, 55, 0.25); }
+      78% { transform: translate(-1px, 0); text-shadow: 1px 0 rgba(249, 201, 114, 0.15); }
     }
 
-    /* ══ LABEL GLITCH — smooth tremble with red tinge ══ */
+    /* ══ LABEL GLITCH — subtle tremble ══ */
     @keyframes label-glitch {
-      0%   { transform: translate(0);          text-shadow: none;                                       color: inherit; }
-      8%   { transform: translate(-4px, 0);    text-shadow: 4px 0 rgba(218, 32, 55, 0.75);              color: rgba(218, 32, 55, 0.85); }
-      18%  { transform: translate(5px, 0);     text-shadow: -5px 0 rgba(249, 201, 114, 0.55);           color: inherit; }
-      28%  { transform: translate(-3px, 1px);  text-shadow: 3px 0 rgba(218, 32, 55, 0.6), -2px 0 rgba(245, 111, 16, 0.45); color: rgba(218, 32, 55, 0.7); }
-      40%  { transform: translate(4px, -1px);  text-shadow: -4px 0 rgba(218, 32, 55, 0.5);              color: inherit; }
-      52%  { transform: translate(-2px, 0);    text-shadow: 2px 0 rgba(249, 201, 114, 0.35);            color: rgba(218, 32, 55, 0.5); }
-      64%  { transform: translate(1px, 0);     text-shadow: -2px 0 rgba(218, 32, 55, 0.25);             color: inherit; }
-      78%  { transform: translate(-1px, 0);    text-shadow: 1px 0 rgba(218, 32, 55, 0.15);              color: rgba(218, 32, 55, 0.3); }
-      90%  { transform: translate(0.5px, 0);   text-shadow: none;                                       color: inherit; }
-      100% { transform: translate(0);          text-shadow: none;                                       color: inherit; }
+      0%, 100% { transform: translate(0); text-shadow: none; }
+      14% { transform: translate(-3px, 0); text-shadow: 3px 0 rgba(218, 32, 55, 0.45); }
+      28% { transform: translate(3px, 0); text-shadow: -3px 0 rgba(249, 201, 114, 0.35); }
+      42% { transform: translate(-2px, 1px); text-shadow: 2px 0 rgba(218, 32, 55, 0.3); }
+      57% { transform: translate(1px, 0); text-shadow: -1px 0 rgba(218, 32, 55, 0.2); }
+      72% { transform: translate(-1px, 0); text-shadow: 1px 0 rgba(218, 32, 55, 0.1); }
+      86% { transform: translate(0.5px, 0); text-shadow: none; }
     }
 
     .glitching {
-      animation: glitch-anim 0.38s steps(6) forwards;
+      animation: glitch-anim 0.55s ease-out forwards;
     }
 
     .label-glitching {
-      animation: label-glitch 0.62s linear forwards;
+      animation: label-glitch 0.7s ease-out forwards;
     }
 
     /* ══ SECTION TITLE BLINKING CURSOR ══ */
@@ -1545,7 +1567,7 @@
       content: '█';
       font-family: var(--pixel);
       font-size: 0.58em;
-      color: var(--white);
+      color: var(--heat);
       margin-left: 10px;
       vertical-align: middle;
       display: inline;
@@ -1556,31 +1578,54 @@
       animation: blink 1s step-end infinite;
     }
 
-    /* ══ GLITCH ICON OVERLAY ══ */
+    /* ══ GLITCH OVERLAY PANEL ══ */
     #glitch-icon {
       position: fixed;
       pointer-events: none;
       z-index: 9500;
-      font-family: var(--pixel);
-      font-size: clamp(0.75rem, 1.1vw, 1rem);
-      color: var(--flame);
+      font-family: var(--mono);
+      font-size: clamp(0.68rem, 0.9vw, 0.82rem);
+      letter-spacing: 0.14em;
+      color: var(--heat);
       opacity: 0;
-      letter-spacing: 0.05em;
+      padding: 12px 20px;
+      border-left: 3px solid var(--heat);
+      border-top: 1px solid rgba(230, 76, 40, 0.4);
+      border-bottom: 1px solid rgba(230, 76, 40, 0.2);
+      border-right: 1px solid rgba(230, 76, 40, 0.15);
+      background: rgba(6, 6, 6, 0.94);
+      backdrop-filter: blur(6px);
+      text-shadow: 0 0 10px rgba(230, 76, 40, 0.55);
+      box-shadow: 0 0 40px rgba(230, 76, 40, 0.08), inset 0 0 16px rgba(230, 76, 40, 0.03);
       white-space: nowrap;
+      min-width: 220px;
     }
 
-    @keyframes icon-flicker {
-      0%   { opacity: 1;   transform: translate(0, 0); }
-      15%  { opacity: 0.8; transform: translate(-2px, 1px);  text-shadow: 3px 0 rgba(249, 201, 114, 0.6); }
-      30%  { opacity: 1;   transform: translate(3px, -1px);  text-shadow: -3px 0 rgba(218, 32, 55, 0.5); }
-      50%  { opacity: 0.7; transform: translate(-1px, 0);    text-shadow: 2px 0 rgba(218, 32, 55, 0.4); }
-      70%  { opacity: 0.4; transform: translate(1px, 1px);   text-shadow: none; }
-      85%  { opacity: 0.2; transform: translate(0, 0); }
-      100% { opacity: 0;   transform: translate(0, 0); }
+    #glitch-icon::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--heat), var(--flame) 40%, transparent);
+    }
+
+    @keyframes icon-glitch {
+      0%   { opacity: 1; clip-path: inset(0 0 0 0);        transform: translate(-50%, -50%); }
+      7%   { opacity: 1; clip-path: inset(22% 0 58% 0);    transform: translate(-47%, -50%) skewX(-4deg); color: var(--gold); }
+      14%  { opacity: 1; clip-path: inset(62% 0 18% 0);    transform: translate(-53%, -50%) skewX(3deg);  color: var(--heat); }
+      22%  { opacity: 1; clip-path: inset(0 0 0 0);        transform: translate(-50%, -50%) skewX(0); }
+      30%  { opacity: 1; clip-path: inset(38% 0 48% 0);    transform: translate(-51%, -50%) skewX(-2deg); }
+      38%  { opacity: 1; clip-path: inset(0 0 0 0);        transform: translate(-50%, -50%); }
+      55%  { opacity: 0.9; }
+      72%  { opacity: 0.55; transform: translate(-50%, -50%); clip-path: inset(0 0 0 0); }
+      86%  { opacity: 0.2;  transform: translate(-50%, -50%) skewX(-1deg); clip-path: inset(42% 0 44% 0); }
+      100% { opacity: 0;    transform: translate(-50%, -50%); clip-path: inset(0 0 0 0); }
     }
 
     #glitch-icon.firing {
-      animation: icon-flicker 0.65s linear forwards;
+      animation: icon-glitch 1.8s linear forwards;
     }
 
     /* ══ REDUCED MOTION ══ */
@@ -1844,7 +1889,7 @@
     <div class="problema-inner">
       <div class="prob-left">
         <span class="label">// ERR_LOG: RAIZ DO PROBLEMA</span>
-        <h2>A sua empresa caiu na <span class="gold">"Armadilha<br>da Fábrica de Features"?</span></h2>
+        <h2>A sua empresa caiu na <br><span class="gold">"Armadilha da Fábrica de Features"?</span></h2>
         <p class="line-reveal">O maior risco da inovação não é a tecnologia. É gastar milhões em uma ideia baseada
           apenas na intuição da diretoria — para só depois descobrir que o mercado não quer comprar.</p>
       </div>
@@ -2492,19 +2537,13 @@
       bentoGrid.style.setProperty('--by', `${e.clientY - r.top}px`);
     });
 
-    /* 3D Tilt on cards */
+    /* Spotlight inner-glow on cards via CSS variable tracking */
     if (isDesktop && !prefersReducedMotion) {
-      document.querySelectorAll('.bento-card, .tcard').forEach(card => {
+      document.querySelectorAll('.bento-card').forEach(card => {
         card.addEventListener('mousemove', e => {
           const rect = card.getBoundingClientRect();
-          const cx = (e.clientX - rect.left) / rect.width - 0.5;
-          const cy = (e.clientY - rect.top) / rect.height - 0.5;
-          card.style.transform = `perspective(800px) rotateY(${cx * 8}deg) rotateX(${-cy * 8}deg)`;
-        });
-        card.addEventListener('mouseleave', () => {
-          card.style.transition = 'transform 0.5s var(--ease-spring)';
-          card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg)';
-          setTimeout(() => { card.style.transition = ''; }, 500);
+          card.style.setProperty('--cx', `${e.clientX - rect.left}px`);
+          card.style.setProperty('--cy', `${e.clientY - rect.top}px`);
         });
       });
     }
@@ -2553,15 +2592,15 @@
           const dx = e.clientX - cx;
           const dy = e.clientY - cy;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 100) {
-            const pull = (1 - dist / 100) * 0.35;
+          if (dist < 80) {
+            const pull = (1 - dist / 80) * 0.25;
             btn.style.transform = `translate(${dx * pull}px, ${dy * pull}px)`;
           }
         });
         btn.addEventListener('mouseleave', () => {
-          btn.style.transition = 'transform 0.5s var(--ease-spring)';
+          btn.style.transition = 'transform 0.6s var(--ease-spring)';
           btn.style.transform = 'translate(0, 0)';
-          setTimeout(() => { btn.style.transition = 'all 0.4s var(--ease)'; }, 500);
+          setTimeout(() => { btn.style.transition = ''; }, 650);
         });
       });
     }
@@ -2686,8 +2725,14 @@
       const LABEL_CLASSES = new Set(['.label', '.err-badge', '.phase-tag', '.warn-tag', '.nav-link']);
       const glitchIconEl = document.getElementById('glitch-icon');
       const ICON_SYMBOLS = [
-        '[ !! ]', '[ ERR ]', '[ FAIL ]', '[ WARN ]', '[ BUG ]',
-        '///ERR///', '##FAULT##', '?!?!?!', '[__]', '>ABORT<',
+        '[ EXCEPTION: 0x7F_UNHANDLED ]',
+        '[ CRITICAL: NULL_REFERENCE ]',
+        '[ FATAL: PROCESS_KILLED_OOM ]',
+        '[ ERR: VALIDATION_FAILED_0xDEAD ]',
+        '[ WARN: MEMORY_LEAK_DETECTED ]',
+        '[ ABORT: STACK_OVERFLOW ]',
+        '[ SYS: CORE_DUMP_0xC000005 ]',
+        '[ FAIL: TIMEOUT_EXCEEDED ]',
       ];
 
       /* ── Text scramble: briefly replaces chars with noise ── */
@@ -2758,7 +2803,7 @@
         void glitchIconEl.offsetWidth; /* reflow to restart animation */
         glitchIconEl.classList.add('firing');
         clearTimeout(iconTimeout);
-        iconTimeout = setTimeout(() => glitchIconEl.classList.remove('firing'), 700);
+        iconTimeout = setTimeout(() => glitchIconEl.classList.remove('firing'), 1900);
       }
 
       /* Pool of elements eligible for periodic glitch */
@@ -2802,19 +2847,13 @@
         if (visible.length > 0) {
           triggerGlitch(visible[Math.floor(Math.random() * visible.length)]);
 
-          /* 35% chance of glitch icon appearing in sync */
-          if (Math.random() < 0.35) {
-            setTimeout(() => showGlitchIcon(), 20 + Math.random() * 80);
-          }
-
-          /* 28% chance of a rapid double-glitch on a second element */
-          if (Math.random() < 0.28 && visible.length > 1) {
-            const second = visible[Math.floor(Math.random() * visible.length)];
-            setTimeout(() => triggerGlitch(second), 90 + Math.random() * 110);
+          /* 25% chance of glitch icon appearing in sync */
+          if (Math.random() < 0.25) {
+            setTimeout(() => showGlitchIcon(), 40 + Math.random() * 120);
           }
         }
 
-        setTimeout(scheduleGlitch, 2200 + Math.random() * 4200);
+        setTimeout(scheduleGlitch, 6000 + Math.random() * 9000);
       }
 
       /* Start after entrance animations settle */
