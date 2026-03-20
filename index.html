@@ -392,6 +392,21 @@
       background-size: 100% 2px;
     }
 
+    /* ══ HEAT PULSE — gradient pulsante no texto ══ */
+    .heat-pulse {
+      background: linear-gradient(90deg, var(--heat) 0%, var(--flame) 35%, var(--gold) 60%, var(--flame) 80%, var(--heat) 100%);
+      background-size: 250% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: heat-pulse-shift 3s ease-in-out infinite;
+    }
+
+    @keyframes heat-pulse-shift {
+      0%, 100% { background-position: 0% center; }
+      50%       { background-position: 100% center; }
+    }
+
     /* ══ LINE-BY-LINE PARAGRAPH REVEAL ══ */
     .line-reveal {
       clip-path: inset(0 0 100% 0);
@@ -1889,7 +1904,7 @@
     <div class="problema-inner">
       <div class="prob-left">
         <span class="label" data-glitch-reveal="// ERR_LOG: RAIZ DO PROBLEMA">// ERR_LOG: RAIZ DO PROBLEMA</span>
-        <h2>A sua empresa caiu na <br><span class="gold">"Armadilha da Fábrica de Features"?</span></h2>
+        <h2>A sua empresa caiu na <br><span class="heat-pulse">Armadilha da Fábrica de Features?</span></h2>
         <p class="line-reveal">O maior risco da inovação não é a tecnologia. É gastar milhões em uma ideia baseada
           apenas na intuição da diretoria — para só depois descobrir que o mercado não quer comprar.</p>
       </div>
