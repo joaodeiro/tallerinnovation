@@ -362,8 +362,7 @@
       opacity: 0;
       transition: opacity 0.3s var(--ease);
     }
-    .btn-primary:hover .bracket,
-    .btn-gold:hover .bracket {
+    .btn-primary:hover .bracket {
       opacity: 1;
     }
 
@@ -1521,37 +1520,9 @@
       line-height: 1.75;
     }
 
-    /* btn-final = primary xl — apenas override de glow mais intenso no CTA final */
-    .btn-final {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      background: var(--heat-gradient);
-      color: var(--white);
-      font-family: var(--mono);
-      font-weight: 700;
-      font-size: 1rem;
-      letter-spacing: 0.06em;
-      padding: 20px 48px;
-      border-radius: 50px;
-      border: 1.5px solid transparent;
-      cursor: none;
-      text-decoration: none;
-      transition: background 0.35s var(--ease), color 0.35s var(--ease), box-shadow 0.35s var(--ease);
-      will-change: transform;
-      animation: glow-pulse 3s ease-in-out infinite;
-    }
-
+    /* btn-final = override do glow hover para intensidade máxima no CTA final */
     .btn-final:hover, .btn-final:active {
-      background: linear-gradient(90deg, var(--flame), #b01a20);
-      color: var(--white);
       box-shadow: 0 0 60px rgba(230, 76, 40, 0.5), 0 0 120px rgba(218, 32, 55, 0.2);
-    }
-
-    .btn-final:focus-visible {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(230, 76, 40, 0.55);
     }
 
     /* dark veil */
@@ -1930,12 +1901,12 @@
       </p>
 
       <div class="hero-ctas reveal">
-        <a href="#cta-final" class="btn btn-gold magnetic">
+        <a href="#cta-final" class="btn btn-primary btn-lg magnetic">
           <span class="bracket">[</span>
           Agendar Avaliação de Viabilidade
           <span class="bracket">]</span>
         </a>
-        <a href="#plano" class="btn btn-outline magnetic">Ver a Metodologia</a>
+        <a href="#plano" class="btn btn-secondary magnetic">Ver a Metodologia</a>
       </div>
     </div>
 
@@ -2031,7 +2002,7 @@
             para "codar rápido". Você precisa de inteligência de mercado upstream. Nós entramos para
             assumir a validação estratégica e provar o que realmente tem potencial de tração comercial.
           </p>
-          <a href="#cta-final" class="btn btn-gold reveal magnetic">
+          <a href="#cta-final" class="btn btn-primary reveal magnetic">
             <span class="bracket">[</span>
             Quero parar de desperdiçar recursos
             <span class="bracket">]</span>
@@ -2247,7 +2218,7 @@
         aplicar nosso Fit Score e descobrir se o seu desafio de produto está pronto
         para a nossa esteira de Inovação.
       </p>
-      <a href="#" class="btn-final magnetic" id="finalBtn">
+      <a href="#" class="btn btn-primary btn-xl btn-final magnetic" id="finalBtn">
         Falar com a Taller Innovation →
       </a>
     </div>
