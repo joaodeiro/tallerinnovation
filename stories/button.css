@@ -8,6 +8,7 @@
 
 /* ─────────────── Base ─────────────── */
 .btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -37,20 +38,46 @@
 .btn-xl   { padding: 20px 48px;  font-size: 1rem;    }
 
 /* ─────────────── Primary ─────────────── */
-@keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 16px rgba(230, 76, 40, 0.3), 0 0 40px rgba(218, 32, 55, 0.1); }
-  50%       { box-shadow: 0 0 28px rgba(230, 76, 40, 0.5), 0 0 64px rgba(218, 32, 55, 0.25); }
+@keyframes glow-fade {
+  0%, 100% { opacity: 0.25; filter: blur(12px); }
+  50%       { opacity: 0.45; filter: blur(18px); }
 }
 
 .btn-primary {
   background: var(--heat-gradient);
+  background-origin: border-box;
+  background-repeat: no-repeat;
   color: var(--white);
-  animation: glow-pulse 3s ease-in-out infinite;
 }
+
+/* Gradient glow via pseudo-element — matches pill colors exactly */
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 53px;
+  background: var(--heat-gradient);
+  background-origin: border-box;
+  filter: blur(14px);
+  opacity: 0.3;
+  z-index: -1;
+  transition: opacity 0.3s var(--ease), filter 0.3s var(--ease);
+  animation: glow-fade 3s ease-in-out infinite;
+}
+.btn-primary:hover::before,
+.btn-primary:active::before {
+  opacity: 0.55;
+  filter: blur(18px);
+}
+.btn-primary:disabled::before {
+  opacity: 0;
+}
+
 .btn-primary:hover,
 .btn-primary:active {
   background: linear-gradient(90deg, var(--flame), #b01a20);
-  box-shadow: 0 0 0 1.5px var(--heat), 0 0 32px rgba(230, 76, 40, 0.45);
+  background-origin: border-box;
+  background-repeat: no-repeat;
 }
 .btn-primary:focus-visible {
   outline: none;
@@ -59,8 +86,6 @@
 .btn-primary:disabled {
   background: linear-gradient(90deg, rgba(230,76,40,.35), rgba(218,32,55,.35));
   color: rgba(255,255,255,0.45);
-  box-shadow: none;
-  animation: none;
   pointer-events: none;
   cursor: not-allowed;
 }

@@ -235,6 +235,7 @@
 
     /* ── Base ── */
     .btn {
+      position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -263,14 +264,40 @@
     /* ── Primary (heat gradient) ── */
     .btn-primary, .btn-gold {
       background: var(--heat-gradient);
+      background-origin: border-box;
+      background-repeat: no-repeat;
       color: var(--white);
-      animation: glow-pulse 3s ease-in-out infinite;
     }
+
+    /* Gradient glow via pseudo-element — matches pill colors exactly */
+    .btn-primary::before, .btn-gold::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 53px;
+      background: var(--heat-gradient);
+      background-origin: border-box;
+      filter: blur(14px);
+      opacity: 0.3;
+      z-index: -1;
+      transition: opacity 0.3s var(--ease), filter 0.3s var(--ease);
+      animation: glow-fade 3s ease-in-out infinite;
+    }
+    .btn-primary:hover::before, .btn-gold:hover::before {
+      opacity: 0.55;
+      filter: blur(18px);
+    }
+    .btn-primary:disabled::before, .btn-gold:disabled::before,
+    .btn-primary[aria-disabled="true"]::before {
+      opacity: 0;
+    }
+
     .btn-primary:hover, .btn-primary:active,
     .btn-gold:hover,    .btn-gold:active {
       background: linear-gradient(90deg, var(--flame), #b01a20);
+      background-origin: border-box;
+      background-repeat: no-repeat;
       color: var(--white);
-      box-shadow: 0 0 0 1.5px var(--heat), 0 0 32px rgba(230, 76, 40, 0.45);
     }
     .btn-primary:focus-visible, .btn-gold:focus-visible {
       outline: none;
@@ -280,8 +307,6 @@
     .btn-gold:disabled    , .btn-gold[aria-disabled="true"] {
       background: linear-gradient(90deg, rgba(230,76,40,0.35), rgba(218,32,55,0.35));
       color: rgba(255,255,255,0.45);
-      box-shadow: none;
-      animation: none;
       pointer-events: none;
     }
 
@@ -349,10 +374,10 @@
       pointer-events: none;
     }
 
-    /* ── Glow pulse (primary only) ── */
-    @keyframes glow-pulse {
-      0%, 100% { box-shadow: 0 0 12px rgba(230, 76, 40, 0.25); }
-      50%       { box-shadow: 0 0 28px rgba(230, 76, 40, 0.5), 0 0 56px rgba(218, 32, 55, 0.2); }
+    /* ── Gradient glow pulse (::before pseudo, matches pill gradient) ── */
+    @keyframes glow-fade {
+      0%, 100% { opacity: 0.25; filter: blur(12px); }
+      50%       { opacity: 0.45; filter: blur(18px); }
     }
 
     /* ── Bracket decoration ── */
@@ -598,7 +623,6 @@
       align-items: center;
       gap: 16px;
       flex-wrap: wrap;
-      will-change: transform;
     }
 
     /* marquee */
@@ -1520,9 +1544,10 @@
       line-height: 1.75;
     }
 
-    /* btn-final = override do glow hover para intensidade máxima no CTA final */
-    .btn-final:hover, .btn-final:active {
-      box-shadow: 0 0 60px rgba(230, 76, 40, 0.5), 0 0 120px rgba(218, 32, 55, 0.2);
+    /* btn-final = glow mais intenso no CTA final */
+    .btn-final:hover::before, .btn-final:active::before {
+      opacity: 0.75;
+      filter: blur(28px);
     }
 
     /* dark veil */
