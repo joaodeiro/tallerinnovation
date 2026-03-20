@@ -376,13 +376,11 @@
     .split-ready .char {
       display: inline-block;
       opacity: 0;
-      transform: translateY(110%);
-      transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
+      transition: opacity 0.12s step-end;
     }
 
     .split-ready.in .char {
       opacity: 1;
-      transform: translateY(0);
     }
 
     /* ══ GOLD HIGHLIGHT SWEEP ══ */
@@ -1520,8 +1518,26 @@
       }
     }
 
+    /* ══ LABEL GLITCH — smooth tremble with red tinge ══ */
+    @keyframes label-glitch {
+      0%   { transform: translate(0);          text-shadow: none;                                       color: inherit; }
+      8%   { transform: translate(-4px, 0);    text-shadow: 4px 0 rgba(218, 32, 55, 0.75);              color: rgba(218, 32, 55, 0.85); }
+      18%  { transform: translate(5px, 0);     text-shadow: -5px 0 rgba(249, 201, 114, 0.55);           color: inherit; }
+      28%  { transform: translate(-3px, 1px);  text-shadow: 3px 0 rgba(218, 32, 55, 0.6), -2px 0 rgba(245, 111, 16, 0.45); color: rgba(218, 32, 55, 0.7); }
+      40%  { transform: translate(4px, -1px);  text-shadow: -4px 0 rgba(218, 32, 55, 0.5);              color: inherit; }
+      52%  { transform: translate(-2px, 0);    text-shadow: 2px 0 rgba(249, 201, 114, 0.35);            color: rgba(218, 32, 55, 0.5); }
+      64%  { transform: translate(1px, 0);     text-shadow: -2px 0 rgba(218, 32, 55, 0.25);             color: inherit; }
+      78%  { transform: translate(-1px, 0);    text-shadow: 1px 0 rgba(218, 32, 55, 0.15);              color: rgba(218, 32, 55, 0.3); }
+      90%  { transform: translate(0.5px, 0);   text-shadow: none;                                       color: inherit; }
+      100% { transform: translate(0);          text-shadow: none;                                       color: inherit; }
+    }
+
     .glitching {
       animation: glitch-anim 0.38s steps(6) forwards;
+    }
+
+    .label-glitching {
+      animation: label-glitch 0.62s linear forwards;
     }
 
     /* ══ SECTION TITLE BLINKING CURSOR ══ */
@@ -1529,7 +1545,7 @@
       content: '█';
       font-family: var(--pixel);
       font-size: 0.58em;
-      color: var(--gold);
+      color: var(--white);
       margin-left: 10px;
       vertical-align: middle;
       display: inline;
@@ -1538,6 +1554,33 @@
 
     .section-title.cursor-active::after {
       animation: blink 1s step-end infinite;
+    }
+
+    /* ══ GLITCH ICON OVERLAY ══ */
+    #glitch-icon {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9500;
+      font-family: var(--pixel);
+      font-size: clamp(0.75rem, 1.1vw, 1rem);
+      color: var(--flame);
+      opacity: 0;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    @keyframes icon-flicker {
+      0%   { opacity: 1;   transform: translate(0, 0); }
+      15%  { opacity: 0.8; transform: translate(-2px, 1px);  text-shadow: 3px 0 rgba(249, 201, 114, 0.6); }
+      30%  { opacity: 1;   transform: translate(3px, -1px);  text-shadow: -3px 0 rgba(218, 32, 55, 0.5); }
+      50%  { opacity: 0.7; transform: translate(-1px, 0);    text-shadow: 2px 0 rgba(218, 32, 55, 0.4); }
+      70%  { opacity: 0.4; transform: translate(1px, 1px);   text-shadow: none; }
+      85%  { opacity: 0.2; transform: translate(0, 0); }
+      100% { opacity: 0;   transform: translate(0, 0); }
+    }
+
+    #glitch-icon.firing {
+      animation: icon-flicker 0.65s linear forwards;
     }
 
     /* ══ REDUCED MOTION ══ */
@@ -1698,6 +1741,9 @@
   <!-- CUSTOM CURSOR -->
   <div id="cursor-dot"></div>
   <div id="cursor-ring"></div>
+
+  <!-- GLITCH ICON OVERLAY -->
+  <div id="glitch-icon"></div>
 
   <!-- SECTION NAV -->
   <div id="section-nav">
@@ -2110,7 +2156,7 @@
               for (const ch of word) {
                 const charSpan = document.createElement('span');
                 charSpan.className = 'char';
-                charSpan.style.transitionDelay = `${charIndex * 25}ms`;
+                charSpan.style.transitionDelay = `${charIndex * 16}ms`;
                 charSpan.textContent = ch;
                 wordSpan.appendChild(charSpan);
                 charIndex++;
@@ -2636,12 +2682,83 @@
          • .nav-link — personalidade sutil na nav
     ═══════════════════════════════════════════ */
     if (!prefersReducedMotion) {
+      const GLITCH_CHARS = '!@#$%&?+<>{}[]/\\|~^*ZX%%@#+';
+      const LABEL_CLASSES = new Set(['.label', '.err-badge', '.phase-tag', '.warn-tag', '.nav-link']);
+      const glitchIconEl = document.getElementById('glitch-icon');
+      const ICON_SYMBOLS = [
+        '[ !! ]', '[ ERR ]', '[ FAIL ]', '[ WARN ]', '[ BUG ]',
+        '///ERR///', '##FAULT##', '?!?!?!', '[__]', '>ABORT<',
+      ];
+
+      /* ── Text scramble: briefly replaces chars with noise ── */
+      function scrambleText(el) {
+        if (el.classList.contains('split-ready')) {
+          /* Split-text headings: scramble individual char spans */
+          const chars = el.querySelectorAll('.char');
+          const originals = [...chars].map(c => c.textContent);
+          chars.forEach(c => {
+            if (c.textContent.trim()) {
+              c.textContent = GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+            }
+          });
+          setTimeout(() => chars.forEach((c, i) => { c.textContent = originals[i]; }), 160);
+        } else {
+          /* Simple elements: scramble full textContent */
+          const original = el.textContent;
+          if (!original.trim()) return;
+          const scrambled = original.split('').map(ch =>
+            ch === ' ' ? ' ' : GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)]
+          ).join('');
+          el.textContent = scrambled;
+          setTimeout(() => { el.textContent = original; }, 160);
+        }
+      }
+
+      /* ── Trigger glitch on element — label variant is smoother ── */
+      function isLabelEl(el) {
+        return el.classList.contains('label') ||
+               el.classList.contains('err-badge') ||
+               el.classList.contains('phase-tag') ||
+               el.classList.contains('warn-tag') ||
+               el.classList.contains('nav-link');
+      }
+
       function triggerGlitch(el) {
-        if (!el || el.classList.contains('glitching')) return;
-        el.classList.add('glitching');
-        const cleanup = () => el.classList.remove('glitching');
+        if (!el || el.classList.contains('glitching') || el.classList.contains('label-glitching')) return;
+
+        const animClass = isLabelEl(el) ? 'label-glitching' : 'glitching';
+        el.classList.add(animClass);
+
+        /* Text scramble fires slightly after animation starts */
+        setTimeout(() => scrambleText(el), 40);
+
+        const cleanup = () => el.classList.remove(animClass);
         el.addEventListener('animationend', cleanup, { once: true });
-        setTimeout(cleanup, 600); /* fallback */
+        setTimeout(cleanup, 800); /* fallback */
+      }
+
+      /* ── Glitch icon: appears/disappears in sync with glitch events ── */
+      let iconTimeout = null;
+      function showGlitchIcon() {
+        if (!glitchIconEl) return;
+
+        /* Random symbol */
+        glitchIconEl.textContent = ICON_SYMBOLS[Math.floor(Math.random() * ICON_SYMBOLS.length)];
+
+        /* Random position within safe viewport area (avoid edges) */
+        const margin = 80;
+        const x = margin + Math.random() * (window.innerWidth - margin * 2);
+        const y = margin + Math.random() * (window.innerHeight - margin * 2);
+        glitchIconEl.style.left = `${x}px`;
+        glitchIconEl.style.top = `${y}px`;
+        glitchIconEl.style.transform = `translate(-50%, -50%)`;
+
+        /* Reset animation */
+        glitchIconEl.classList.remove('firing');
+        void glitchIconEl.offsetWidth; /* reflow to restart animation */
+        glitchIconEl.classList.add('firing');
+        clearTimeout(iconTimeout);
+        iconTimeout = setTimeout(() => glitchIconEl.classList.remove('firing'), 700);
       }
 
       /* Pool of elements eligible for periodic glitch */
@@ -2684,6 +2801,11 @@
 
         if (visible.length > 0) {
           triggerGlitch(visible[Math.floor(Math.random() * visible.length)]);
+
+          /* 35% chance of glitch icon appearing in sync */
+          if (Math.random() < 0.35) {
+            setTimeout(() => showGlitchIcon(), 20 + Math.random() * 80);
+          }
 
           /* 28% chance of a rapid double-glitch on a second element */
           if (Math.random() < 0.28 && visible.length > 1) {
