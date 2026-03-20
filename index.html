@@ -1888,7 +1888,7 @@
   <section id="problema">
     <div class="problema-inner">
       <div class="prob-left">
-        <span class="label">// ERR_LOG: RAIZ DO PROBLEMA</span>
+        <span class="label" data-glitch-reveal="// ERR_LOG: RAIZ DO PROBLEMA">// ERR_LOG: RAIZ DO PROBLEMA</span>
         <h2>A sua empresa caiu na <br><span class="gold">"Armadilha da Fábrica de Features"?</span></h2>
         <p class="line-reveal">O maior risco da inovação não é a tecnologia. É gastar milhões em uma ideia baseada
           apenas na intuição da diretoria — para só depois descobrir que o mercado não quer comprar.</p>
@@ -2724,6 +2724,16 @@
       const GLITCH_CHARS = '!@#$%&?+<>{}[]/\\|~^*ZX%%@#+';
       const LABEL_CLASSES = new Set(['.label', '.err-badge', '.phase-tag', '.warn-tag', '.nav-link']);
       const glitchIconEl = document.getElementById('glitch-icon');
+
+      /* ── Inverted-glitch labels: garbled by default, reveal real text on glitch ── */
+      document.querySelectorAll('[data-glitch-reveal]').forEach(el => {
+        const real = el.dataset.glitchReveal;
+        const garbled = real.split('').map(ch =>
+          ch === ' ' ? ' ' : GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)]
+        ).join('');
+        el.dataset.glitchGarbled = garbled;
+        el.textContent = garbled;
+      });
       const ICON_SYMBOLS = [
         '[ EXCEPTION: 0x7F_UNHANDLED ]',
         '[ CRITICAL: NULL_REFERENCE ]',
@@ -2737,6 +2747,14 @@
 
       /* ── Text scramble: briefly replaces chars with noise ── */
       function scrambleText(el) {
+        if (el.dataset.glitchReveal) {
+          /* Inverted: garbled by default — glitch briefly reveals real text */
+          const real = el.dataset.glitchReveal;
+          const garbled = el.dataset.glitchGarbled || el.textContent;
+          el.textContent = real;
+          setTimeout(() => { el.textContent = garbled; }, 160);
+          return;
+        }
         if (el.classList.contains('split-ready')) {
           /* Split-text headings: scramble individual char spans */
           const chars = el.querySelectorAll('.char');
