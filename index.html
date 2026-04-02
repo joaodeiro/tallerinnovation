@@ -1020,72 +1020,128 @@
       max-width: 560px;
     }
 
-    .bento {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      background: var(--graphite-30);
+    /* ══ PHASES NAVIGATOR ══ */
+    .phases-nav {
       border: var(--border);
+      border-bottom: none;
+    }
+
+    .phases-nav-track {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    .pnav-tab {
+      background: none;
+      border: none;
+      border-right: var(--border);
+      cursor: pointer;
+      padding: 20px 22px 18px;
+      text-align: left;
       position: relative;
+      transition: background 0.25s var(--ease);
+      -webkit-tap-highlight-color: transparent;
     }
+    .pnav-tab:last-child { border-right: none; }
 
-    .bento-card:last-child:nth-child(odd) {
-      grid-column: 1 / -1;
-    }
-
-
-
-    .bento-card {
-      background: var(--carbon);
-      padding: 52px 44px;
-      position: relative;
-      overflow: hidden;
-      z-index: 1;
-      opacity: 0;
-      transform: translateY(18px);
-      transition: opacity 0.8s var(--ease), transform 0.8s var(--ease-spring), background 0.4s var(--ease);
-    }
-
-    .bento-card.in {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* cursor-tracked radial spotlight */
-    .bento-card::after {
+    .pnav-tab::after {
       content: '';
       position: absolute;
-      inset: 0;
-      background: radial-gradient(
-        120px circle at var(--cx, 50%) var(--cy, 50%),
-        rgba(230, 76, 40, 0.09),
-        transparent 70%
-      );
-      opacity: 0;
-      transition: opacity 0.4s var(--ease);
-      pointer-events: none;
-      z-index: 0;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--heat-gradient);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.45s var(--ease);
     }
+    .pnav-tab.active::after  { transform: scaleX(1); }
+    .pnav-tab:hover          { background: rgba(255,255,255,0.025); }
+    .pnav-tab:focus-visible  { outline: 1px solid var(--gold); outline-offset: -1px; }
 
-    .bento-card:hover::after {
-      opacity: 1;
-    }
-
-    .bento-num {
+    .pnav-num {
+      display: block;
       font-family: var(--pixel);
-      font-size: 7.5rem;
-      color: #2a2a2d;
+      font-size: 0.92rem;
+      color: var(--graphite);
+      letter-spacing: 0.1em;
+      margin-bottom: 7px;
+      transition: color 0.25s;
+    }
+    .pnav-tab.active .pnav-num { color: var(--gold); }
+
+    .pnav-name {
+      display: block;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--graphite);
+      line-height: 1.35;
+      transition: color 0.25s;
+    }
+    .pnav-tab.active .pnav-name { color: var(--white); }
+
+    .pnav-progress {
+      height: 2px;
+      background: var(--graphite-15);
+      overflow: hidden;
+    }
+    .pnav-progress-fill {
+      height: 100%;
+      background: var(--heat-gradient);
+      width: 0%;
+      will-change: width;
+    }
+
+    /* ── Phases Panel ── */
+    .phases-panel {
+      border: var(--border);
+      border-top: none;
+      display: grid;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .phase-slide {
+      grid-area: 1 / 1;
+      display: grid;
+      grid-template-columns: 55fr 45fr;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(28px);
+      transition: opacity 0.48s var(--ease), transform 0.48s var(--ease);
+      will-change: opacity, transform;
+    }
+    .phase-slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+    .phase-slide.exit-left {
+      opacity: 0;
+      transform: translateX(-28px);
+      pointer-events: none;
+    }
+
+    /* Left column */
+    .phase-main {
+      padding: 52px 52px 48px;
+      position: relative;
+      border-right: var(--border);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .phase-bg-num {
+      font-family: var(--pixel);
+      font-size: 13rem;
+      color: rgba(255,255,255,0.024);
       position: absolute;
-      bottom: -16px;
-      right: 16px;
+      bottom: -20px;
+      left: -6px;
       line-height: 1;
       user-select: none;
+      pointer-events: none;
       z-index: 0;
-    }
-
-    .bento-body {
-      position: relative;
-      z-index: 1;
     }
 
     .phase-tag {
@@ -1094,25 +1150,105 @@
       color: var(--gold);
       letter-spacing: 0.08em;
       display: block;
-      margin-bottom: 14px;
-      transition: color 0.3s var(--ease);
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
     }
 
-    .bento-card:hover .phase-tag {
-      color: var(--heat);
-    }
-
-    .bento-card h3 {
+    .phase-main h3 {
       font-family: var(--mono);
-      font-size: 1.2rem;
+      font-size: clamp(1.15rem, 1.7vw, 1.55rem);
       color: var(--white);
-      margin-bottom: 12px;
+      margin-bottom: 18px;
+      line-height: 1.18;
+      position: relative;
+      z-index: 1;
     }
 
-    .bento-card p {
-      font-size: 0.88rem;
+    .phase-main p {
+      font-size: 0.92rem;
       color: var(--graphite);
-      line-height: 1.7;
+      line-height: 1.82;
+      max-width: 400px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .phase-next-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 36px;
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      color: var(--graphite);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      letter-spacing: 0.04em;
+      transition: color 0.25s;
+      width: fit-content;
+      position: relative;
+      z-index: 1;
+    }
+    .phase-next-btn:hover { color: var(--gold); }
+    .phase-next-arrow {
+      display: inline-block;
+      transition: transform 0.3s var(--ease-spring);
+    }
+    .phase-next-btn:hover .phase-next-arrow { transform: translateX(4px); }
+    .phase-slide:last-child .phase-next-btn { visibility: hidden; }
+
+    /* Right column — terminal */
+    .phase-terminal {
+      background: #0c0c0e;
+      padding: 28px 30px 30px;
+      display: flex;
+      flex-direction: column;
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      overflow: hidden;
+    }
+
+    .term-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 20px;
+      padding-bottom: 13px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .term-dot { width: 9px; height: 9px; border-radius: 50%; }
+    .term-dot-r { background: #FF5F57; }
+    .term-dot-y { background: #FFBD2E; }
+    .term-dot-g { background: #28C840; }
+    .term-title {
+      font-size: 0.67rem;
+      color: var(--graphite);
+      margin-left: auto;
+      letter-spacing: 0.06em;
+      opacity: 0.55;
+    }
+
+    .term-body { flex: 1; }
+    .tl          { display: block; line-height: 2.05; color: var(--graphite); }
+    .tl-cmd      { color: var(--gold); }
+    .tl-ok       { color: #28C840; }
+    .tl-warn     { color: var(--flame); }
+    .tl-val      { color: var(--white); }
+    .tl-dim      { opacity: 0.35; }
+    .tl-key      { color: #7EAAFF; }
+    .tl-sep      { display: block; color: rgba(255,255,255,0.07); margin: 3px 0; letter-spacing: 0.01em; }
+
+    .term-status-line {
+      margin-top: 14px;
+      padding: 9px 13px;
+      background: rgba(249,201,114,0.05);
+      border-left: 2px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
     }
 
     /* ══════════════════════════════════
@@ -1859,9 +1995,19 @@
         padding: 80px 24px;
       }
 
-      .bento {
+      .phases-nav-track {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        grid-template-columns: repeat(5, minmax(110px, 1fr));
+      }
+      .phases-nav-track::-webkit-scrollbar { display: none; }
+
+      .phase-slide {
         grid-template-columns: 1fr;
       }
+      .phase-terminal { display: none; }
+      .phase-main { padding: 40px 24px; }
 
       #resultados {
         grid-template-columns: 1fr;
@@ -2113,57 +2259,220 @@
         <h2 class="split-target reveal">Como validamos o seu negócio <span class="heat-pulse">em poucas semanas:</span></h2>
       </div>
 
-      <div class="bento" id="bentoGrid">
-        <div class="bento-card">
-          <span class="bento-num" data-scramble="01">01</span>
-          <div class="bento-body">
-            <span class="phase-tag">[ FASE_01: IMERSÃO ]</span>
-            <h3>Imersão e Contexto</h3>
-            <p>Alinhamos as expectativas da diretoria e mapeamos coletivamente todas as certezas, suposições e dúvidas
-              sobre o novo produto através da Matriz CSD.</p>
+      <!-- Phase Tab Navigator -->
+      <nav class="phases-nav reveal" aria-label="Fases da metodologia">
+        <div class="phases-nav-track" role="tablist">
+          <button class="pnav-tab active" data-phase="0" role="tab" aria-selected="true" aria-controls="phase-0">
+            <span class="pnav-num">01</span>
+            <span class="pnav-name">Imersão e Contexto</span>
+          </button>
+          <button class="pnav-tab" data-phase="1" role="tab" aria-selected="false" aria-controls="phase-1">
+            <span class="pnav-num">02</span>
+            <span class="pnav-name">Inteligência de Mercado</span>
+          </button>
+          <button class="pnav-tab" data-phase="2" role="tab" aria-selected="false" aria-controls="phase-2">
+            <span class="pnav-num">03</span>
+            <span class="pnav-name">Estratégia e Negócio</span>
+          </button>
+          <button class="pnav-tab" data-phase="3" role="tab" aria-selected="false" aria-controls="phase-3">
+            <span class="pnav-num">04</span>
+            <span class="pnav-name">Tangibilização</span>
+          </button>
+          <button class="pnav-tab" data-phase="4" role="tab" aria-selected="false" aria-controls="phase-4">
+            <span class="pnav-num">05</span>
+            <span class="pnav-name">O Dossiê Final</span>
+          </button>
+        </div>
+        <div class="pnav-progress" role="progressbar" aria-label="Progresso do carrossel">
+          <div class="pnav-progress-fill"></div>
+        </div>
+      </nav>
+
+      <!-- Phase Content Panel -->
+      <div class="phases-panel">
+
+        <!-- Fase 01 -->
+        <div class="phase-slide active" id="phase-0" role="tabpanel">
+          <div class="phase-main">
+            <span class="phase-bg-num" aria-hidden="true">01</span>
+            <div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;">
+              <span class="phase-tag">[ FASE_01: IMERSÃO ]</span>
+              <h3>Imersão e Contexto</h3>
+              <p>Alinhamos as expectativas da diretoria e mapeamos coletivamente todas as certezas, suposições e dúvidas sobre o novo produto através da Matriz CSD.</p>
+              <button class="phase-next-btn" aria-label="Próxima fase">
+                FASE_02: INTELIGÊNCIA <span class="phase-next-arrow">→</span>
+              </button>
+            </div>
+          </div>
+          <div class="phase-terminal" aria-hidden="true">
+            <div class="term-bar">
+              <span class="term-dot term-dot-r"></span>
+              <span class="term-dot term-dot-y"></span>
+              <span class="term-dot term-dot-g"></span>
+              <span class="term-title">taller-discovery — fase_01</span>
+            </div>
+            <div class="term-body">
+              <span class="tl"><span class="tl-cmd">$ taller run</span> <span class="tl-val">--phase=imersao</span></span>
+              <span class="tl-sep">───────────────────────────────</span>
+              <span class="tl">▸ sync stakeholders...<span class="tl-ok">         [OK]</span></span>
+              <span class="tl">▸ load matriz-csd<span class="tl-ok">              [OK]</span></span>
+              <span class="tl"> </span>
+              <span class="tl"><span class="tl-key">  certezas (C)</span>   · <span class="tl-val">12</span> items</span>
+              <span class="tl"><span class="tl-key">  suposições (S)</span>  · <span class="tl-warn">28</span> items <span class="tl-warn">← risco</span></span>
+              <span class="tl"><span class="tl-key">  dúvidas (D)</span>    · <span class="tl-warn">41</span> items</span>
+              <span class="tl"> </span>
+              <span class="tl-sep">───────────────────────────────</span>
+            </div>
+            <div class="term-status-line">DONE&nbsp;&nbsp;alinhamento executivo confirmado</div>
           </div>
         </div>
 
-        <div class="bento-card">
-          <span class="bento-num" data-scramble="02">02</span>
-          <div class="bento-body">
-            <span class="phase-tag">[ FASE_02: INTELIGÊNCIA ]</span>
-            <h3>Inteligência e Exploração de Mercado</h3>
-            <p>Vamos a campo. Entrevistamos o seu ICP, mapeamos a concorrência e desenhamos a Proposta de Valor perfeita
-              para garantir o Product-Market Fit.</p>
+        <!-- Fase 02 -->
+        <div class="phase-slide" id="phase-1" role="tabpanel">
+          <div class="phase-main">
+            <span class="phase-bg-num" aria-hidden="true">02</span>
+            <div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;">
+              <span class="phase-tag">[ FASE_02: INTELIGÊNCIA ]</span>
+              <h3>Inteligência e Exploração de Mercado</h3>
+              <p>Vamos a campo. Entrevistamos o seu ICP, mapeamos a concorrência e desenhamos a Proposta de Valor perfeita para garantir o Product-Market Fit.</p>
+              <button class="phase-next-btn" aria-label="Próxima fase">
+                FASE_03: ESTRATÉGIA <span class="phase-next-arrow">→</span>
+              </button>
+            </div>
+          </div>
+          <div class="phase-terminal" aria-hidden="true">
+            <div class="term-bar">
+              <span class="term-dot term-dot-r"></span>
+              <span class="term-dot term-dot-y"></span>
+              <span class="term-dot term-dot-g"></span>
+              <span class="term-title">taller-discovery — fase_02</span>
+            </div>
+            <div class="term-body">
+              <span class="tl"><span class="tl-cmd">$ taller run</span> <span class="tl-val">--phase=research</span></span>
+              <span class="tl-sep">───────────────────────────────</span>
+              <span class="tl">▸ entrevistas ICP <span class="tl-dim">(n=12)</span><span class="tl-ok">    [DONE]</span></span>
+              <span class="tl">▸ análise competitiva<span class="tl-ok">         [4 players]</span></span>
+              <span class="tl">▸ proposta de valor <span class="tl-dim">v3</span><span class="tl-ok">      [DONE]</span></span>
+              <span class="tl"> </span>
+              <span class="tl"><span class="tl-key">  pain score</span>    · <span class="tl-val">8.4</span> / 10</span>
+              <span class="tl"><span class="tl-key">  fit score</span>     · <span class="tl-val">72</span> / 100 <span class="tl-ok">✓</span></span>
+              <span class="tl"><span class="tl-key">  gaps críticos</span> · <span class="tl-warn">3</span> encontrados</span>
+              <span class="tl"> </span>
+              <span class="tl-sep">───────────────────────────────</span>
+            </div>
+            <div class="term-status-line">WARN&nbsp;&nbsp;dor real ≠ hipótese inicial</div>
           </div>
         </div>
 
-        <div class="bento-card">
-          <span class="bento-num" data-scramble="03">03</span>
-          <div class="bento-body">
-            <span class="phase-tag">[ FASE_03: ESTRATÉGIA ]</span>
-            <h3>Estratégia e Modelagem de Negócio</h3>
-            <p>Conectamos a dor descoberta na pesquisa com uma proposta de valor executável. Desenhamos o modelo de
-              negócio, definimos posicionamento e estabelecemos as métricas de sucesso.</p>
+        <!-- Fase 03 -->
+        <div class="phase-slide" id="phase-2" role="tabpanel">
+          <div class="phase-main">
+            <span class="phase-bg-num" aria-hidden="true">03</span>
+            <div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;">
+              <span class="phase-tag">[ FASE_03: ESTRATÉGIA ]</span>
+              <h3>Estratégia e Modelagem de Negócio</h3>
+              <p>Conectamos a dor descoberta na pesquisa com uma proposta de valor executável. Desenhamos o modelo de negócio, definimos posicionamento e estabelecemos as métricas de sucesso.</p>
+              <button class="phase-next-btn" aria-label="Próxima fase">
+                FASE_04: TANGIBILIZAÇÃO <span class="phase-next-arrow">→</span>
+              </button>
+            </div>
+          </div>
+          <div class="phase-terminal" aria-hidden="true">
+            <div class="term-bar">
+              <span class="term-dot term-dot-r"></span>
+              <span class="term-dot term-dot-y"></span>
+              <span class="term-dot term-dot-g"></span>
+              <span class="term-title">taller-discovery — fase_03</span>
+            </div>
+            <div class="term-body">
+              <span class="tl"><span class="tl-cmd">$ taller run</span> <span class="tl-val">--phase=strategy</span></span>
+              <span class="tl-sep">───────────────────────────────</span>
+              <span class="tl">▸ modelo de negócio<span class="tl-ok">       [SaaS B2B]</span></span>
+              <span class="tl">▸ posicionamento<span class="tl-ok">          [DEFINED]</span></span>
+              <span class="tl">▸ métricas de sucesso<span class="tl-ok">     [6 KPIs]</span></span>
+              <span class="tl"> </span>
+              <span class="tl"><span class="tl-key">  TAM</span>             · <span class="tl-val">R$ 2.4B</span></span>
+              <span class="tl"><span class="tl-key">  unit economics</span>  · <span class="tl-ok">VALIDATED</span></span>
+              <span class="tl"><span class="tl-key">  go-to-market</span>    · <span class="tl-ok">MAPPED</span></span>
+              <span class="tl"> </span>
+              <span class="tl-sep">───────────────────────────────</span>
+            </div>
+            <div class="term-status-line">DONE&nbsp;&nbsp;proposta de valor executável</div>
           </div>
         </div>
 
-        <div class="bento-card">
-          <span class="bento-num" data-scramble="04">04</span>
-          <div class="bento-body">
-            <span class="phase-tag">[ FASE_04: TANGIBILIZAÇÃO ]</span>
-            <h3>Tangibilização e Viabilidade</h3>
-            <p>Transformamos a estratégia em artefatos tangíveis: arquitetura macro, análise de custos e viabilidade
-              técnica, fatiamento do escopo (User Story Map) e um protótipo navegável testado com usuários reais.</p>
+        <!-- Fase 04 -->
+        <div class="phase-slide" id="phase-3" role="tabpanel">
+          <div class="phase-main">
+            <span class="phase-bg-num" aria-hidden="true">04</span>
+            <div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;">
+              <span class="phase-tag">[ FASE_04: TANGIBILIZAÇÃO ]</span>
+              <h3>Tangibilização e Viabilidade</h3>
+              <p>Transformamos a estratégia em artefatos tangíveis: arquitetura macro, análise de custos e viabilidade técnica, fatiamento do escopo (User Story Map) e um protótipo navegável testado com usuários reais.</p>
+              <button class="phase-next-btn" aria-label="Próxima fase">
+                FASE_05: DOSSIÊ <span class="phase-next-arrow">→</span>
+              </button>
+            </div>
+          </div>
+          <div class="phase-terminal" aria-hidden="true">
+            <div class="term-bar">
+              <span class="term-dot term-dot-r"></span>
+              <span class="term-dot term-dot-y"></span>
+              <span class="term-dot term-dot-g"></span>
+              <span class="term-title">taller-discovery — fase_04</span>
+            </div>
+            <div class="term-body">
+              <span class="tl"><span class="tl-cmd">$ taller run</span> <span class="tl-val">--phase=build</span></span>
+              <span class="tl-sep">───────────────────────────────</span>
+              <span class="tl">▸ arquitetura macro<span class="tl-ok">       [DONE]</span></span>
+              <span class="tl">▸ user story map<span class="tl-ok">          [47 stories]</span></span>
+              <span class="tl">▸ scope fatiado<span class="tl-ok">           [3 releases]</span></span>
+              <span class="tl">▸ protótipo navegável<span class="tl-ok">     [v1.0]</span></span>
+              <span class="tl">▸ testes com usuários<span class="tl-ok">     [8 sessões ✓]</span></span>
+              <span class="tl"> </span>
+              <span class="tl-sep">───────────────────────────────</span>
+            </div>
+            <div class="term-status-line">DONE&nbsp;&nbsp;artefatos entregues</div>
           </div>
         </div>
 
-        <div class="bento-card">
-          <span class="bento-num" data-scramble="05">05</span>
-          <div class="bento-body">
-            <span class="phase-tag">[ FASE_05: DOSSIÊ ]</span>
-            <h3>O Dossiê Final</h3>
-            <p>Showcase executivo com o dossiê consolidado: análise de risco, escopo do MVP fatiado, estimativa de
-              esforço e custo. A munição que o seu Champion precisa para defender o investimento na diretoria.</p>
+        <!-- Fase 05 -->
+        <div class="phase-slide" id="phase-4" role="tabpanel">
+          <div class="phase-main">
+            <span class="phase-bg-num" aria-hidden="true">05</span>
+            <div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;">
+              <span class="phase-tag">[ FASE_05: DOSSIÊ ]</span>
+              <h3>O Dossiê Final</h3>
+              <p>Showcase executivo com o dossiê consolidado: análise de risco, escopo do MVP fatiado, estimativa de esforço e custo. A munição que o seu Champion precisa para defender o investimento na diretoria.</p>
+              <button class="phase-next-btn" aria-label="Última fase">
+                &nbsp;
+              </button>
+            </div>
+          </div>
+          <div class="phase-terminal" aria-hidden="true">
+            <div class="term-bar">
+              <span class="term-dot term-dot-r"></span>
+              <span class="term-dot term-dot-y"></span>
+              <span class="term-dot term-dot-g"></span>
+              <span class="term-title">taller-discovery — fase_05</span>
+            </div>
+            <div class="term-body">
+              <span class="tl"><span class="tl-cmd">$ taller export</span> <span class="tl-val">executive-dossier</span></span>
+              <span class="tl-sep">───────────────────────────────</span>
+              <span class="tl">▸ análise de risco<span class="tl-ok">        [INCLUDED]</span></span>
+              <span class="tl">▸ escopo MVP fatiado<span class="tl-ok">      [DONE]</span></span>
+              <span class="tl">▸ estimativa de esforço<span class="tl-val">   14 semanas</span></span>
+              <span class="tl">▸ ROI projetado <span class="tl-dim">(12mo)</span><span class="tl-val">    3.2x</span></span>
+              <span class="tl"> </span>
+              <span class="tl"><span class="tl-key">  risco financeiro</span> · <span class="tl-ok">MITIGADO</span></span>
+              <span class="tl"><span class="tl-key">  champion pack</span>    · <span class="tl-ok">READY</span></span>
+              <span class="tl-sep">───────────────────────────────</span>
+            </div>
+            <div class="term-status-line">READY&nbsp;&nbsp;defenda o investimento →</div>
           </div>
         </div>
-      </div>
+
+      </div><!-- /phases-panel -->
     </div>
   </section>
 
@@ -2440,11 +2749,11 @@
       });
 
       document.addEventListener('mouseover', e => {
-        const target = e.target.closest('a, button, .btn, .btn-final, .bento-card, .tcard, .nav-link');
+        const target = e.target.closest('a, button, .btn, .btn-final, .pnav-tab, .tcard, .nav-link, .phase-next-btn');
         if (target) ring.classList.add('hovering');
       });
       document.addEventListener('mouseout', e => {
-        const target = e.target.closest('a, button, .btn, .btn-final, .bento-card, .tcard, .nav-link');
+        const target = e.target.closest('a, button, .btn, .btn-final, .pnav-tab, .tcard, .nav-link, .phase-next-btn');
         if (target) ring.classList.remove('hovering');
       });
 
@@ -2527,7 +2836,7 @@
       });
     }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-    const revealEls = document.querySelectorAll('.reveal, .err-card, .bento-card, .benefit');
+    const revealEls = document.querySelectorAll('.reveal, .err-card, .benefit');
     revealEls.forEach(el => revealObs.observe(el));
 
     /* Fallback: on scroll, force-check visibility for elements that observer might have missed */
@@ -2683,54 +2992,131 @@
     }
 
     /* ═══════════════════════════════════════════
-       6. BENTO SPOTLIGHT + TILT + SCRAMBLE
+       6. PHASES NAVIGATOR
     ═══════════════════════════════════════════ */
-    const bentoGrid = document.getElementById('bentoGrid');
+    (function () {
+      const tabs      = Array.from(document.querySelectorAll('.pnav-tab'));
+      const slides    = Array.from(document.querySelectorAll('.phase-slide'));
+      const progFill  = document.querySelector('.pnav-progress-fill');
+      const DURATION  = 5000;
 
-    /* Spotlight */
-    bentoGrid.addEventListener('mousemove', e => {
-      const r = bentoGrid.getBoundingClientRect();
-      bentoGrid.style.setProperty('--bx', `${e.clientX - r.left}px`);
-      bentoGrid.style.setProperty('--by', `${e.clientY - r.top}px`);
-    });
+      let current  = 0;
+      let autoTimer = null;
+      let paused   = false;
+      let touchX0  = 0;
 
-    /* Spotlight inner-glow on cards via CSS variable tracking */
-    if (isDesktop && !prefersReducedMotion) {
-      document.querySelectorAll('.bento-card').forEach(card => {
-        card.addEventListener('mousemove', e => {
-          const rect = card.getBoundingClientRect();
-          card.style.setProperty('--cx', `${e.clientX - rect.left}px`);
-          card.style.setProperty('--cy', `${e.clientY - rect.top}px`);
+      function goTo(next, dir) {
+        if (next === current || next < 0 || next >= tabs.length) return;
+        const prev = current;
+        current = next;
+
+        /* Update tabs */
+        tabs[prev].classList.remove('active');
+        tabs[prev].setAttribute('aria-selected', 'false');
+        tabs[current].classList.add('active');
+        tabs[current].setAttribute('aria-selected', 'true');
+
+        /* Animate slides */
+        const prevSlide = slides[prev];
+        const nextSlide = slides[current];
+
+        /* Exit current */
+        prevSlide.classList.remove('active');
+        prevSlide.classList.add('exit-left');
+        prevSlide.addEventListener('transitionend', () => {
+          prevSlide.classList.remove('exit-left');
+        }, { once: true });
+
+        /* Enter next — start from correct side */
+        nextSlide.style.transition = 'none';
+        nextSlide.style.transform  = `translateX(${dir >= 0 ? 28 : -28}px)`;
+        nextSlide.style.opacity    = '0';
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          nextSlide.style.transition = '';
+          nextSlide.style.transform  = '';
+          nextSlide.style.opacity    = '';
+          nextSlide.classList.add('active');
+        }));
+
+        resetProgress();
+      }
+
+      function advance() {
+        goTo((current + 1) % tabs.length, 1);
+      }
+
+      function resetProgress() {
+        if (!progFill) return;
+        progFill.style.transition = 'none';
+        progFill.style.width = '0%';
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          progFill.style.transition = `width ${DURATION}ms linear`;
+          progFill.style.width = '100%';
+        }));
+      }
+
+      function startAuto() {
+        clearInterval(autoTimer);
+        autoTimer = setInterval(() => { if (!paused) advance(); }, DURATION);
+      }
+
+      /* Kick off */
+      resetProgress();
+      startAuto();
+
+      /* Tab clicks */
+      tabs.forEach((tab, i) => {
+        tab.addEventListener('click', () => {
+          goTo(i, i > current ? 1 : -1);
+          startAuto();
         });
       });
-    }
 
-    /* Number scramble on reveal */
-    const scrambleObs = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const el = entry.target;
-          const final = el.dataset.scramble;
-          const delay = parseInt(el.closest('.bento-card')?.dataset.stagger || '0');
-          setTimeout(() => scrambleNumber(el, final), delay);
-          scrambleObs.unobserve(el);
-        }
+      /* "Next phase" button inside slides */
+      document.querySelectorAll('.phase-next-btn').forEach((btn, i) => {
+        btn.addEventListener('click', () => {
+          goTo(i + 1, 1);
+          startAuto();
+        });
       });
-    }, { threshold: 0.5 });
 
-    document.querySelectorAll('[data-scramble]').forEach((el, i) => {
-      el.closest('.bento-card').dataset.stagger = i * 120;
-      scrambleObs.observe(el);
-    });
+      /* Pause on hover */
+      ['.phases-panel', '.phases-nav'].forEach(sel => {
+        const el = document.querySelector(sel);
+        if (!el) return;
+        el.addEventListener('mouseenter', () => { paused = true; });
+        el.addEventListener('mouseleave', () => { paused = false; });
+      });
 
-    /* Diagonal stagger for bento cards */
-    const bentoCards = document.querySelectorAll('.bento-card');
-    bentoCards.forEach((card, i) => {
-      const col = i % 2;
-      const row = Math.floor(i / 2);
-      const delay = (col + row) * 100;
-      card.style.transitionDelay = `${delay}ms`;
-    });
+      /* Keyboard arrow navigation */
+      document.querySelector('.phases-nav-track')
+        ?.addEventListener('keydown', e => {
+          if (e.key === 'ArrowRight') { goTo(Math.min(current + 1, tabs.length - 1), 1); tabs[current]?.focus(); }
+          if (e.key === 'ArrowLeft')  { goTo(Math.max(current - 1, 0), -1);             tabs[current]?.focus(); }
+        });
+
+      /* Touch swipe on panel */
+      const panel = document.querySelector('.phases-panel');
+      panel?.addEventListener('touchstart', e => { touchX0 = e.touches[0].clientX; }, { passive: true });
+      panel?.addEventListener('touchend',   e => {
+        const dx = touchX0 - e.changedTouches[0].clientX;
+        if (Math.abs(dx) > 48) {
+          goTo(dx > 0 ? Math.min(current + 1, tabs.length - 1) : Math.max(current - 1, 0), dx > 0 ? 1 : -1);
+          startAuto();
+        }
+      }, { passive: true });
+
+      /* Reveal when section enters viewport */
+      const phasesNav = document.querySelector('.phases-nav');
+      if (phasesNav) {
+        new IntersectionObserver(([entry]) => {
+          if (entry.isIntersecting) {
+            phasesNav.classList.add('in');
+            resetProgress();
+          }
+        }, { threshold: 0.15 }).observe(phasesNav);
+      }
+    }());
 
     /* Diagonal stagger for benefits */
     document.querySelectorAll('.benefit').forEach((b, i) => {
@@ -2873,7 +3259,7 @@
          • .err-badge ([ ERR: ... ]) — tema de erro reforça o efeito
          • .phase-tag ([ FASE_0X ]) — estética de código
          • .warn-tag ([ WARN: ... ]) — tensão dramática
-         • .bento-num — números grandes como dados corrompidos
+         • .phase-bg-num — números grandes como dados corrompidos
          • .guia-caption h3 — caixa visual do guia
          • .nav-link — personalidade sutil na nav
     ═══════════════════════════════════════════ */
@@ -2967,7 +3353,7 @@
       /* Pool of elements eligible for periodic glitch */
       const glitchPool = [
         ...document.querySelectorAll(
-          '.label, .err-badge, .phase-tag, .warn-tag, .bento-num, .guia-caption h3, .nav-link'
+          '.label, .err-badge, .phase-tag, .warn-tag, .pnav-num, .guia-caption h3, .nav-link'
         )
       ];
 
