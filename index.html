@@ -2983,11 +2983,10 @@
         document.querySelector('#cta-final .cta-h'),
       ].filter(Boolean);
 
-      /* Glitch-on-reveal: brief glitch when a heading first enters viewport */
+      /* Glitch-on-reveal: fires every time a heading scrolls into viewport */
       const glitchRevealObs = new IntersectionObserver(entries => {
         entries.forEach(entry => {
-          if (entry.isIntersecting && !entry.target.dataset.glitchSeen) {
-            entry.target.dataset.glitchSeen = '1';
+          if (entry.isIntersecting) {
             setTimeout(() => triggerGlitch(entry.target), 280);
           }
         });
@@ -2995,28 +2994,34 @@
 
       glitchHeadings.forEach(el => glitchRevealObs.observe(el));
 
-      /* Periodic random glitch on visible elements */
-      function scheduleGlitch() {
-        const allTargets = [...glitchPool, ...glitchHeadings];
-        const visible = allTargets.filter(el => {
+      /* Periodic synchronized glitch: all section headings fire together every 5s */
+      function pulseAllHeadings() {
+        glitchHeadings.forEach(el => {
+          /* tiny random stagger (0–80ms) so they don't feel robotic */
+          setTimeout(() => triggerGlitch(el), Math.random() * 80);
+        });
+
+        /* Also glitch one random label/badge from the pool */
+        const visiblePool = glitchPool.filter(el => {
           const r = el.getBoundingClientRect();
           return r.top < window.innerHeight && r.bottom > 0;
         });
-
-        if (visible.length > 0) {
-          triggerGlitch(visible[Math.floor(Math.random() * visible.length)]);
-
-          /* 25% chance of glitch icon appearing in sync */
-          if (Math.random() < 0.25) {
-            setTimeout(() => showGlitchIcon(), 40 + Math.random() * 120);
-          }
+        if (visiblePool.length > 0) {
+          const pick = visiblePool[Math.floor(Math.random() * visiblePool.length)];
+          setTimeout(() => triggerGlitch(pick), Math.random() * 120);
         }
 
-        setTimeout(scheduleGlitch, 6000 + Math.random() * 9000);
+        /* 40% chance of glitch icon appearing in sync */
+        if (Math.random() < 0.40) {
+          setTimeout(() => showGlitchIcon(), 40 + Math.random() * 120);
+        }
       }
 
-      /* Start after entrance animations settle */
-      setTimeout(scheduleGlitch, 4500);
+      /* Start after entrance animations settle, then repeat every 5s */
+      setTimeout(() => {
+        pulseAllHeadings();
+        setInterval(pulseAllHeadings, 5000);
+      }, 4500);
     }
 
     /* ═══════════════════════════════════════════
