@@ -3282,18 +3282,26 @@
       /* ── Text scramble: briefly replaces chars with noise ── */
       function scrambleText(el) {
         if (el.classList.contains('split-ready')) {
-          /* Split-text headings: scramble individual char spans */
+          /* Split-text headings: scramble individual char spans.
+             IMPORTANT: always read/restore from data-glitch-orig, never from
+             current textContent — prevents "stuck glitch" when background
+             throttling causes multiple calls to fire in rapid succession. */
           const chars = el.querySelectorAll('.char');
-          const originals = [...chars].map(c => c.textContent);
           chars.forEach(c => {
-            if (c.textContent.trim()) {
+            if (!c.dataset.glitchOrig) c.dataset.glitchOrig = c.textContent;
+          });
+          chars.forEach(c => {
+            if (c.dataset.glitchOrig?.trim()) {
               c.textContent = GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
             }
           });
-          setTimeout(() => chars.forEach((c, i) => { c.textContent = originals[i]; }), 160);
+          setTimeout(() => chars.forEach(c => {
+            c.textContent = c.dataset.glitchOrig ?? c.textContent;
+          }), 160);
         } else {
-          /* Simple elements: scramble full textContent */
-          const original = el.textContent;
+          /* Simple elements — same data-attr guard */
+          if (!el.dataset.glitchOrig) el.dataset.glitchOrig = el.textContent;
+          const original = el.dataset.glitchOrig;
           if (!original.trim()) return;
           const scrambled = original.split('').map(ch =>
             ch === ' ' ? ' ' : GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)]
@@ -3403,11 +3411,28 @@
         }
       }
 
-      /* Start after entrance animations settle, then repeat every 5s */
+      /* Start after entrance animations settle, then repeat every 12s */
       setTimeout(() => {
         pulseAllHeadings();
-        setInterval(pulseAllHeadings, 5000);
+        setInterval(pulseAllHeadings, 12000);
       }, 4500);
+
+      /* ── Visibility guard: reset any stuck scrambled state when tab regains focus ── */
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) return;
+        /* Restore char spans stored in data-glitch-orig */
+        document.querySelectorAll('.char[data-glitch-orig]').forEach(c => {
+          c.textContent = c.dataset.glitchOrig;
+        });
+        /* Restore simple elements */
+        document.querySelectorAll('[data-glitch-orig]:not(.char)').forEach(el => {
+          el.textContent = el.dataset.glitchOrig;
+        });
+        /* Remove any stuck animation classes */
+        document.querySelectorAll('.glitching, .label-glitching').forEach(el => {
+          el.classList.remove('glitching', 'label-glitching');
+        });
+      });
     }
 
     /* ═══════════════════════════════════════════
