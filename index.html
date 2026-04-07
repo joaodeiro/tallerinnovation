@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Consultoria de Inovação Digital | Taller Innovation</title>
   <meta name="description"
-    content="Laboratório de inovação digital para você validar ideias B2B, mitigar riscos financeiros, entregar segurança para a diretoria investir em estratégia de produto.">
+    content="Laboratório de inovação digital para validar ideias B2B, mitigar riscos financeiros, entregar segurança para a diretoria investir em estratégia de produto.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://tallerinnovation.vercel.app/">
 
@@ -632,7 +632,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 36px;
+      margin-bottom: 16px;
       will-change: transform;
     }
 
@@ -1020,128 +1020,70 @@
       max-width: 560px;
     }
 
-    /* ══ PHASES NAVIGATOR ══ */
-    .phases-nav {
-      border: var(--border);
-      border-bottom: none;
-    }
-
-    .phases-nav-track {
+    /* ══ BENTO GRID ══ */
+    .bento {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-    }
-
-    .pnav-tab {
-      background: none;
-      border: none;
-      border-right: var(--border);
-      cursor: pointer;
-      padding: 20px 22px 18px;
-      text-align: left;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--graphite-30);
+      border: var(--border);
       position: relative;
-      transition: background 0.25s var(--ease);
-      -webkit-tap-highlight-color: transparent;
     }
-    .pnav-tab:last-child { border-right: none; }
 
-    .pnav-tab::after {
+    .bento-card:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+    }
+
+    .bento-card {
+      background: var(--carbon);
+      padding: 52px 44px;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.8s var(--ease), transform 0.8s var(--ease-spring), background 0.4s var(--ease);
+    }
+
+    .bento-card.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .bento-card::after {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--heat-gradient);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.45s var(--ease);
-    }
-    .pnav-tab.active::after  { transform: scaleX(1); }
-    .pnav-tab:hover          { background: rgba(255,255,255,0.025); }
-    .pnav-tab:focus-visible  { outline: 1px solid var(--gold); outline-offset: -1px; }
-
-    .pnav-num {
-      display: block;
-      font-family: var(--pixel);
-      font-size: 0.92rem;
-      color: var(--graphite);
-      letter-spacing: 0.1em;
-      margin-bottom: 7px;
-      transition: color 0.25s;
-    }
-    .pnav-tab.active .pnav-num { color: var(--gold); }
-
-    .pnav-name {
-      display: block;
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      color: var(--graphite);
-      line-height: 1.35;
-      transition: color 0.25s;
-    }
-    .pnav-tab.active .pnav-name { color: var(--white); }
-
-    .pnav-progress {
-      height: 2px;
-      background: var(--graphite-15);
-      overflow: hidden;
-    }
-    .pnav-progress-fill {
-      height: 100%;
-      background: var(--heat-gradient);
-      width: 0%;
-      will-change: width;
-    }
-
-    /* ── Phases Panel ── */
-    .phases-panel {
-      border: var(--border);
-      border-top: none;
-      display: grid;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .phase-slide {
-      grid-area: 1 / 1;
-      display: grid;
-      grid-template-columns: 55fr 45fr;
+      inset: 0;
+      background: radial-gradient(
+        120px circle at var(--cx, 50%) var(--cy, 50%),
+        rgba(230, 76, 40, 0.09),
+        transparent 70%
+      );
       opacity: 0;
-      pointer-events: none;
-      transform: translateX(28px);
-      transition: opacity 0.48s var(--ease), transform 0.48s var(--ease);
-      will-change: opacity, transform;
-    }
-    .phase-slide.active {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateX(0);
-    }
-    .phase-slide.exit-left {
-      opacity: 0;
-      transform: translateX(-28px);
-      pointer-events: none;
-    }
-
-    /* Left column */
-    .phase-main {
-      padding: 52px 52px 48px;
-      position: relative;
-      border-right: var(--border);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .phase-bg-num {
-      font-family: var(--pixel);
-      font-size: 13rem;
-      color: rgba(255,255,255,0.024);
-      position: absolute;
-      bottom: -20px;
-      left: -6px;
-      line-height: 1;
-      user-select: none;
+      transition: opacity 0.4s var(--ease);
       pointer-events: none;
       z-index: 0;
+    }
+
+    .bento-card:hover::after {
+      opacity: 1;
+    }
+
+    .bento-num {
+      font-family: var(--pixel);
+      font-size: 7.5rem;
+      color: #2a2a2d;
+      position: absolute;
+      bottom: -16px;
+      right: 16px;
+      line-height: 1;
+      user-select: none;
+      z-index: 0;
+    }
+
+    .bento-body {
+      position: relative;
+      z-index: 1;
     }
 
     .phase-tag {
@@ -1150,105 +1092,25 @@
       color: var(--gold);
       letter-spacing: 0.08em;
       display: block;
-      margin-bottom: 18px;
-      position: relative;
-      z-index: 1;
+      margin-bottom: 14px;
+      transition: color 0.3s var(--ease);
     }
 
-    .phase-main h3 {
+    .bento-card:hover .phase-tag {
+      color: var(--heat);
+    }
+
+    .bento-card h3 {
       font-family: var(--mono);
-      font-size: clamp(1.15rem, 1.7vw, 1.55rem);
+      font-size: 1.2rem;
       color: var(--white);
-      margin-bottom: 18px;
-      line-height: 1.18;
-      position: relative;
-      z-index: 1;
+      margin-bottom: 12px;
     }
 
-    .phase-main p {
-      font-size: 0.92rem;
+    .bento-card p {
+      font-size: 0.88rem;
       color: var(--graphite);
-      line-height: 1.82;
-      max-width: 400px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .phase-next-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 36px;
-      font-family: var(--mono);
-      font-size: 0.74rem;
-      color: var(--graphite);
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 0;
-      letter-spacing: 0.04em;
-      transition: color 0.25s;
-      width: fit-content;
-      position: relative;
-      z-index: 1;
-    }
-    .phase-next-btn:hover { color: var(--gold); }
-    .phase-next-arrow {
-      display: inline-block;
-      transition: transform 0.3s var(--ease-spring);
-    }
-    .phase-next-btn:hover .phase-next-arrow { transform: translateX(4px); }
-    .phase-slide:last-child .phase-next-btn { visibility: hidden; }
-
-    /* Right column — terminal */
-    .phase-terminal {
-      background: #0c0c0e;
-      padding: 28px 30px 30px;
-      display: flex;
-      flex-direction: column;
-      font-family: var(--mono);
-      font-size: 0.76rem;
-      overflow: hidden;
-    }
-
-    .term-bar {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 20px;
-      padding-bottom: 13px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    .term-dot { width: 9px; height: 9px; border-radius: 50%; }
-    .term-dot-r { background: #FF5F57; }
-    .term-dot-y { background: #FFBD2E; }
-    .term-dot-g { background: #28C840; }
-    .term-title {
-      font-size: 0.67rem;
-      color: var(--graphite);
-      margin-left: auto;
-      letter-spacing: 0.06em;
-      opacity: 0.55;
-    }
-
-    .term-body { flex: 1; }
-    .tl          { display: block; line-height: 2.05; color: var(--graphite); }
-    .tl-cmd      { color: var(--gold); }
-    .tl-ok       { color: #28C840; }
-    .tl-warn     { color: var(--flame); }
-    .tl-val      { color: var(--white); }
-    .tl-dim      { opacity: 0.35; }
-    .tl-key      { color: #7EAAFF; }
-    .tl-sep      { display: block; color: rgba(255,255,255,0.07); margin: 3px 0; letter-spacing: 0.01em; }
-
-    .term-status-line {
-      margin-top: 14px;
-      padding: 9px 13px;
-      background: rgba(249,201,114,0.05);
-      border-left: 2px solid var(--gold);
-      color: var(--gold);
-      font-size: 0.72rem;
-      letter-spacing: 0.06em;
+      line-height: 1.7;
     }
 
     /* ══════════════════════════════════
@@ -1995,19 +1857,9 @@
         padding: 80px 24px;
       }
 
-      .phases-nav-track {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        grid-template-columns: repeat(5, minmax(110px, 1fr));
-      }
-      .phases-nav-track::-webkit-scrollbar { display: none; }
-
-      .phase-slide {
+      .bento {
         grid-template-columns: 1fr;
       }
-      .phase-terminal { display: none; }
-      .phase-main { padding: 40px 24px; }
 
       #resultados {
         grid-template-columns: 1fr;
@@ -2118,21 +1970,18 @@
       </div>
 
       <h1 class="hero-h split-target reveal">
-        Laboratório de Inovação Digital: Validação de Mercado
-        com Método para a Próxima Inovação
-        da sua Empresa.
+        <span class="heat-pulse" style="white-space:nowrap">Pare de queimar dinheiro</span><br>construindo a coisa errada!
       </h1>
 
       <p class="hero-sub reveal">
-        Garanta o ROI do seu produto antes de codar.
-        Você vai mapear problemas, testar hipóteses no mercado
-        e definir o escopo do seu MVP.
+        Laboratório de Inovação Digital: Nós ajudamos você a mapear problemas, testar hipóteses no mercado
+        e definir o escopo do seu MVP antes de codar.
       </p>
 
       <div class="hero-ctas reveal">
         <a href="#cta-final" class="btn btn-primary btn-lg magnetic">
           <span class="bracket">[</span>
-          Agendar Avaliação de Viabilidade
+          Agendar Avaliação
           <span class="bracket">]</span>
         </a>
         <a href="#plano" class="btn btn-secondary magnetic">Ver a Metodologia</a>
@@ -2140,7 +1989,7 @@
     </div>
 
     <div class="marquee-wrap">
-      <p class="label marquee-label-row">Confiado por empresas inovadoras:</p>
+      <p class="label marquee-label-row">Quem confia:</p>
       <div class="marquee-track">
         <span class="marquee-item"><img src="logo-ebanx.svg" alt="Ebanx — cliente Taller Innovation" /></span>
         <span class="marquee-item">///</span>
@@ -2186,8 +2035,7 @@
       <div class="prob-left">
         <span class="label">// ERR_LOG: RAIZ DO PROBLEMA</span>
         <h2 class="split-target reveal">A sua empresa não investe em <br><span class="heat-pulse">estratégia de produto?</span></h2>
-        <p class="line-reveal">O maior risco da inovação é gastar em uma ideia baseada
-          apenas na intuição da diretoria para só depois descobrir que o mercado não quer comprar.</p>
+        <p class="line-reveal">Gastar em ideia baseada em intuição para depois descobrir que ninguém quer comprar.</p>
       </div>
 
       <div class="prob-right">
@@ -2200,13 +2048,13 @@
         <div class="err-card">
           <span class="err-badge">[ ERR: NO_GOVERNANCE ]</span>
           <h3>Falta de Governança</h3>
-          <p>Dificuldade em provar com dados quais projetos merecem investimento e quais devem ser descartados.</p>
+          <p>Quais projetos merecem investimento e quais devem ser descartados.</p>
         </div>
 
         <div class="err-card">
           <span class="err-badge">[ FAILED: CASH_BURN ]</span>
           <h3>Desperdício de Caixa</h3>
-          <p>O orçamento de engenharia está sendo consumido por funcionalidades que ninguém usa.</p>
+          <p>O orçamento de engenharia vai pro lixo por funcionalidades que ninguém usa.</p>
         </div>
       </div>
     </div>
@@ -2222,15 +2070,16 @@
       <div class="guia-grid">
         <div class="guia-text">
           <span class="label reveal">// SYS_RESPONSE: A SOLUÇÃO</span>
-          <h2 class="split-target reveal">Seu laboratório de <span class="heat-pulse">Product Discovery as a Service.</span></h2>
+          <h2 class="split-target reveal">Seu laboratório de <span class="heat-pulse">Inovação.</span></h2>
           <p class="reveal line-reveal">
-            Para proteger o seu orçamento e diversificar sua receita, você não precisa de mais braços
-            para "codar rápido". Você precisa de validação de mercado upstream. Nós entramos para
-            assumir a mitigação de risco financeiro e provar o que realmente tem potencial de tração comercial.
+            Para sobreviver nesse cenário e parar de construir autoestradas que dão direto num abismo,
+            pare agora de sobrecarregar seu time para criar um fluxo onde o trabalho é puxado por quem bota
+            a mão na massa, e só quando uma capacidade real é liberada.
+            A gente assume o risco financeiro para validar o que realmente tem potencial de venda.
           </p>
           <a href="#cta-final" class="btn btn-primary reveal magnetic">
             <span class="bracket">[</span>
-            Quero parar de desperdiçar recursos
+            Quero parar de queimar dinheiro
             <span class="bracket">]</span>
           </a>
         </div>
@@ -2239,7 +2088,7 @@
           <div class="guia-halftone"></div>
           <div class="guia-gold-accent"></div>
           <div class="guia-caption">
-            <h3>Taller Innovation Studio</h3>
+            <h3>Laboratório de Inovação</h3>
             <p>// Pesquisa · Validação de Mercado · Governança Executiva · Prototipagem</p>
           </div>
         </div>
@@ -2259,220 +2108,52 @@
         <h2 class="split-target reveal">Como validamos o seu negócio <span class="heat-pulse">em poucas semanas:</span></h2>
       </div>
 
-      <!-- Phase Tab Navigator -->
-      <nav class="phases-nav reveal" aria-label="Fases da metodologia">
-        <div class="phases-nav-track" role="tablist">
-          <button class="pnav-tab active" data-phase="0" role="tab" aria-selected="true" aria-controls="phase-0">
-            <span class="pnav-num">01</span>
-            <span class="pnav-name">Imersão e Contexto</span>
-          </button>
-          <button class="pnav-tab" data-phase="1" role="tab" aria-selected="false" aria-controls="phase-1">
-            <span class="pnav-num">02</span>
-            <span class="pnav-name">Inteligência de Mercado</span>
-          </button>
-          <button class="pnav-tab" data-phase="2" role="tab" aria-selected="false" aria-controls="phase-2">
-            <span class="pnav-num">03</span>
-            <span class="pnav-name">Estratégia e Negócio</span>
-          </button>
-          <button class="pnav-tab" data-phase="3" role="tab" aria-selected="false" aria-controls="phase-3">
-            <span class="pnav-num">04</span>
-            <span class="pnav-name">Tangibilização</span>
-          </button>
-          <button class="pnav-tab" data-phase="4" role="tab" aria-selected="false" aria-controls="phase-4">
-            <span class="pnav-num">05</span>
-            <span class="pnav-name">O Dossiê Final</span>
-          </button>
-        </div>
-        <div class="pnav-progress" role="progressbar" aria-label="Progresso do carrossel">
-          <div class="pnav-progress-fill"></div>
-        </div>
-      </nav>
-
-      <!-- Phase Content Panel -->
-      <div class="phases-panel">
-
-        <!-- Fase 01 -->
-        <div class="phase-slide active" id="phase-0" role="tabpanel">
-          <div class="phase-main">
-            <span class="phase-bg-num" aria-hidden="true">01</span>
-            <div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;">
-              <span class="phase-tag">[ FASE_01: IMERSÃO ]</span>
-              <h3>Imersão e Contexto</h3>
-              <p>Alinhamos as expectativas da diretoria e mapeamos coletivamente todas as certezas, suposições e dúvidas sobre o novo produto através da Matriz CSD.</p>
-              <button class="phase-next-btn" aria-label="Próxima fase">
-                FASE_02: INTELIGÊNCIA <span class="phase-next-arrow">→</span>
-              </button>
-            </div>
-          </div>
-          <div class="phase-terminal" aria-hidden="true">
-            <div class="term-bar">
-              <span class="term-dot term-dot-r"></span>
-              <span class="term-dot term-dot-y"></span>
-              <span class="term-dot term-dot-g"></span>
-              <span class="term-title">taller-discovery — fase_01</span>
-            </div>
-            <div class="term-body">
-              <span class="tl"><span class="tl-cmd">$ taller run</span> <span class="tl-val">--phase=imersao</span></span>
-              <span class="tl-sep">───────────────────────────────</span>
-              <span class="tl">▸ sync stakeholders...<span class="tl-ok">         [OK]</span></span>
-              <span class="tl">▸ load matriz-csd<span class="tl-ok">              [OK]</span></span>
-              <span class="tl"> </span>
-              <span class="tl"><span class="tl-key">  certezas (C)</span>   · <span class="tl-val">12</span> items</span>
-              <span class="tl"><span class="tl-key">  suposições (S)</span>  · <span class="tl-warn">28</span> items <span class="tl-warn">← risco</span></span>
-              <span class="tl"><span class="tl-key">  dúvidas (D)</span>    · <span class="tl-warn">41</span> items</span>
-              <span class="tl"> </span>
-              <span class="tl-sep">───────────────────────────────</span>
-            </div>
-            <div class="term-status-line">DONE&nbsp;&nbsp;alinhamento executivo confirmado</div>
+      <div class="bento" id="bentoGrid">
+        <div class="bento-card">
+          <span class="bento-num" data-scramble="01">01</span>
+          <div class="bento-body">
+            <span class="phase-tag">[ FASE_01: IMERSÃO ]</span>
+            <h3>Imersão e Contexto</h3>
+            <p>Alinhamos as expectativas da diretoria e mapeamos coletivamente todas as certezas, suposições e dúvidas sobre o novo produto através da Matriz CSD.</p>
           </div>
         </div>
 
-        <!-- Fase 02 -->
-        <div class="phase-slide" id="phase-1" role="tabpanel">
-          <div class="phase-main">
-            <span class="phase-bg-num" aria-hidden="true">02</span>
-            <div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;">
-              <span class="phase-tag">[ FASE_02: INTELIGÊNCIA ]</span>
-              <h3>Inteligência e Exploração de Mercado</h3>
-              <p>Vamos a campo. Entrevistamos o seu ICP, mapeamos a concorrência e desenhamos a Proposta de Valor perfeita para garantir o Product-Market Fit.</p>
-              <button class="phase-next-btn" aria-label="Próxima fase">
-                FASE_03: ESTRATÉGIA <span class="phase-next-arrow">→</span>
-              </button>
-            </div>
-          </div>
-          <div class="phase-terminal" aria-hidden="true">
-            <div class="term-bar">
-              <span class="term-dot term-dot-r"></span>
-              <span class="term-dot term-dot-y"></span>
-              <span class="term-dot term-dot-g"></span>
-              <span class="term-title">taller-discovery — fase_02</span>
-            </div>
-            <div class="term-body">
-              <span class="tl"><span class="tl-cmd">$ taller run</span> <span class="tl-val">--phase=research</span></span>
-              <span class="tl-sep">───────────────────────────────</span>
-              <span class="tl">▸ entrevistas ICP <span class="tl-dim">(n=12)</span><span class="tl-ok">    [DONE]</span></span>
-              <span class="tl">▸ análise competitiva<span class="tl-ok">         [4 players]</span></span>
-              <span class="tl">▸ proposta de valor <span class="tl-dim">v3</span><span class="tl-ok">      [DONE]</span></span>
-              <span class="tl"> </span>
-              <span class="tl"><span class="tl-key">  pain score</span>    · <span class="tl-val">8.4</span> / 10</span>
-              <span class="tl"><span class="tl-key">  fit score</span>     · <span class="tl-val">72</span> / 100 <span class="tl-ok">✓</span></span>
-              <span class="tl"><span class="tl-key">  gaps críticos</span> · <span class="tl-warn">3</span> encontrados</span>
-              <span class="tl"> </span>
-              <span class="tl-sep">───────────────────────────────</span>
-            </div>
-            <div class="term-status-line">WARN&nbsp;&nbsp;dor real ≠ hipótese inicial</div>
+        <div class="bento-card">
+          <span class="bento-num" data-scramble="02">02</span>
+          <div class="bento-body">
+            <span class="phase-tag">[ FASE_02: INTELIGÊNCIA ]</span>
+            <h3>Inteligência e Exploração de Mercado</h3>
+            <p>Vamos a campo. Entrevistamos o seu ICP, mapeamos a concorrência e desenhamos a Proposta de Valor perfeita para garantir o Product-Market Fit.</p>
           </div>
         </div>
 
-        <!-- Fase 03 -->
-        <div class="phase-slide" id="phase-2" role="tabpanel">
-          <div class="phase-main">
-            <span class="phase-bg-num" aria-hidden="true">03</span>
-            <div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;">
-              <span class="phase-tag">[ FASE_03: ESTRATÉGIA ]</span>
-              <h3>Estratégia e Modelagem de Negócio</h3>
-              <p>Conectamos a dor descoberta na pesquisa com uma proposta de valor executável. Desenhamos o modelo de negócio, definimos posicionamento e estabelecemos as métricas de sucesso.</p>
-              <button class="phase-next-btn" aria-label="Próxima fase">
-                FASE_04: TANGIBILIZAÇÃO <span class="phase-next-arrow">→</span>
-              </button>
-            </div>
-          </div>
-          <div class="phase-terminal" aria-hidden="true">
-            <div class="term-bar">
-              <span class="term-dot term-dot-r"></span>
-              <span class="term-dot term-dot-y"></span>
-              <span class="term-dot term-dot-g"></span>
-              <span class="term-title">taller-discovery — fase_03</span>
-            </div>
-            <div class="term-body">
-              <span class="tl"><span class="tl-cmd">$ taller run</span> <span class="tl-val">--phase=strategy</span></span>
-              <span class="tl-sep">───────────────────────────────</span>
-              <span class="tl">▸ modelo de negócio<span class="tl-ok">       [SaaS B2B]</span></span>
-              <span class="tl">▸ posicionamento<span class="tl-ok">          [DEFINED]</span></span>
-              <span class="tl">▸ métricas de sucesso<span class="tl-ok">     [6 KPIs]</span></span>
-              <span class="tl"> </span>
-              <span class="tl"><span class="tl-key">  TAM</span>             · <span class="tl-val">R$ 2.4B</span></span>
-              <span class="tl"><span class="tl-key">  unit economics</span>  · <span class="tl-ok">VALIDATED</span></span>
-              <span class="tl"><span class="tl-key">  go-to-market</span>    · <span class="tl-ok">MAPPED</span></span>
-              <span class="tl"> </span>
-              <span class="tl-sep">───────────────────────────────</span>
-            </div>
-            <div class="term-status-line">DONE&nbsp;&nbsp;proposta de valor executável</div>
+        <div class="bento-card">
+          <span class="bento-num" data-scramble="03">03</span>
+          <div class="bento-body">
+            <span class="phase-tag">[ FASE_03: ESTRATÉGIA ]</span>
+            <h3>Estratégia e Modelagem de Negócio</h3>
+            <p>Conectamos a dor descoberta na pesquisa com uma proposta de valor executável. Desenhamos o modelo de negócio, definimos posicionamento e estabelecemos as métricas de sucesso.</p>
           </div>
         </div>
 
-        <!-- Fase 04 -->
-        <div class="phase-slide" id="phase-3" role="tabpanel">
-          <div class="phase-main">
-            <span class="phase-bg-num" aria-hidden="true">04</span>
-            <div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;">
-              <span class="phase-tag">[ FASE_04: TANGIBILIZAÇÃO ]</span>
-              <h3>Tangibilização e Viabilidade</h3>
-              <p>Transformamos a estratégia em artefatos tangíveis: arquitetura macro, análise de custos e viabilidade técnica, fatiamento do escopo (User Story Map) e um protótipo navegável testado com usuários reais.</p>
-              <button class="phase-next-btn" aria-label="Próxima fase">
-                FASE_05: DOSSIÊ <span class="phase-next-arrow">→</span>
-              </button>
-            </div>
-          </div>
-          <div class="phase-terminal" aria-hidden="true">
-            <div class="term-bar">
-              <span class="term-dot term-dot-r"></span>
-              <span class="term-dot term-dot-y"></span>
-              <span class="term-dot term-dot-g"></span>
-              <span class="term-title">taller-discovery — fase_04</span>
-            </div>
-            <div class="term-body">
-              <span class="tl"><span class="tl-cmd">$ taller run</span> <span class="tl-val">--phase=build</span></span>
-              <span class="tl-sep">───────────────────────────────</span>
-              <span class="tl">▸ arquitetura macro<span class="tl-ok">       [DONE]</span></span>
-              <span class="tl">▸ user story map<span class="tl-ok">          [47 stories]</span></span>
-              <span class="tl">▸ scope fatiado<span class="tl-ok">           [3 releases]</span></span>
-              <span class="tl">▸ protótipo navegável<span class="tl-ok">     [v1.0]</span></span>
-              <span class="tl">▸ testes com usuários<span class="tl-ok">     [8 sessões ✓]</span></span>
-              <span class="tl"> </span>
-              <span class="tl-sep">───────────────────────────────</span>
-            </div>
-            <div class="term-status-line">DONE&nbsp;&nbsp;artefatos entregues</div>
+        <div class="bento-card">
+          <span class="bento-num" data-scramble="04">04</span>
+          <div class="bento-body">
+            <span class="phase-tag">[ FASE_04: TANGIBILIZAÇÃO ]</span>
+            <h3>Tangibilização e Viabilidade</h3>
+            <p>Transformamos a estratégia em artefatos tangíveis: arquitetura macro, análise de custos e viabilidade técnica, fatiamento do escopo (User Story Map) e um protótipo navegável testado com usuários reais.</p>
           </div>
         </div>
 
-        <!-- Fase 05 -->
-        <div class="phase-slide" id="phase-4" role="tabpanel">
-          <div class="phase-main">
-            <span class="phase-bg-num" aria-hidden="true">05</span>
-            <div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;">
-              <span class="phase-tag">[ FASE_05: DOSSIÊ ]</span>
-              <h3>O Dossiê Final</h3>
-              <p>Showcase executivo com o dossiê consolidado: análise de risco, escopo do MVP fatiado, estimativa de esforço e custo. A munição que o seu Champion precisa para defender o investimento na diretoria.</p>
-              <button class="phase-next-btn" aria-label="Última fase">
-                &nbsp;
-              </button>
-            </div>
-          </div>
-          <div class="phase-terminal" aria-hidden="true">
-            <div class="term-bar">
-              <span class="term-dot term-dot-r"></span>
-              <span class="term-dot term-dot-y"></span>
-              <span class="term-dot term-dot-g"></span>
-              <span class="term-title">taller-discovery — fase_05</span>
-            </div>
-            <div class="term-body">
-              <span class="tl"><span class="tl-cmd">$ taller export</span> <span class="tl-val">executive-dossier</span></span>
-              <span class="tl-sep">───────────────────────────────</span>
-              <span class="tl">▸ análise de risco<span class="tl-ok">        [INCLUDED]</span></span>
-              <span class="tl">▸ escopo MVP fatiado<span class="tl-ok">      [DONE]</span></span>
-              <span class="tl">▸ estimativa de esforço<span class="tl-val">   14 semanas</span></span>
-              <span class="tl">▸ ROI projetado <span class="tl-dim">(12mo)</span><span class="tl-val">    3.2x</span></span>
-              <span class="tl"> </span>
-              <span class="tl"><span class="tl-key">  risco financeiro</span> · <span class="tl-ok">MITIGADO</span></span>
-              <span class="tl"><span class="tl-key">  champion pack</span>    · <span class="tl-ok">READY</span></span>
-              <span class="tl-sep">───────────────────────────────</span>
-            </div>
-            <div class="term-status-line">READY&nbsp;&nbsp;defenda o investimento →</div>
+        <div class="bento-card">
+          <span class="bento-num" data-scramble="05">05</span>
+          <div class="bento-body">
+            <span class="phase-tag">[ FASE_05: DOSSIÊ ]</span>
+            <h3>O Dossiê Final</h3>
+            <p>Showcase executivo com o dossiê consolidado: análise de risco, escopo do MVP fatiado, estimativa de esforço e custo. A munição que você precisa para defender o investimento na diretoria.</p>
           </div>
         </div>
-
-      </div><!-- /phases-panel -->
+      </div>
     </div>
   </section>
 
@@ -2490,25 +2171,22 @@
         <div class="benefit">
           <span class="ok-badge">[ OK ]</span>
           <div>
-            <h3>Munição de Dados</h3>
-            <p>Argumentos validados no mercado para aprovar ou barrar ideias da diretoria com evidências reais, não
-              opiniões.</p>
+            <h3>Evidência</h3>
+            <p>Argumentos validados no mercado para aprovar ou barrar ideias com evidências reais.</p>
           </div>
         </div>
         <div class="benefit">
           <span class="ok-badge">[ SYS_UP ]</span>
           <div>
-            <h3>Mitigação de Risco Financeiro</h3>
-            <p>Descubra se uma ideia é viável custando uma fração mínima do que custaria para ser desenvolvida por
-              completo — antes de alocar o orçamento de engenharia.</p>
+            <h3>Blindagem</h3>
+            <p>Descubra se a ideia é viável custando uma fração mínima do que custaria para ser desenvolvida por completo.</p>
           </div>
         </div>
         <div class="benefit">
           <span class="ok-badge">[ VERIFIED ]</span>
           <div>
-            <h3>Escopo Cirúrgico</h3>
-            <p>Se aprovada, sua engenharia receberá um MVP cristalino, focado apenas no que gera valor real de mercado.
-            </p>
+            <h3>Escopo</h3>
+            <p>Receba um MVP focado no que gera valor real de mercado.</p>
           </div>
         </div>
       </div>
@@ -2518,7 +2196,7 @@
       <h2 class="split-target reveal">
         O custo de <span class="strikethrough">ignorar</span> o mercado<br>
         é muito maior que o custo<br>
-        de <span class="heat-pulse">descobri-lo</span> com método.
+        da <span class="heat-pulse">descoberta.</span>
       </h2>
       <p class="reveal line-reveal" style="max-width:340px; margin-bottom:32px;">
         Desenvolver às cegas é a forma mais rápida de <strong style="color:var(--white)">queimar</strong> a esteira de
@@ -2536,8 +2214,8 @@
   <section id="social">
     <div class="social-inner">
       <div class="social-header">
-        <span class="label reveal">// DB_QUERY: REGISTROS_DE_SUCESSO</span>
-        <h2 class="split-target reveal">Quem confia no <span class="heat-pulse">nosso método.</span></h2>
+        <span class="label reveal">// QUERY: REGISTROS_DE_SUCESSO</span>
+        <h2 class="split-target reveal">Quem botou fé no <span class="heat-pulse">nosso método.</span></h2>
       </div>
 
       <div class="testimonials">
@@ -2608,17 +2286,13 @@
     <div class="cta-content">
       <span class="label reveal">// LAST_CMD: EXECUTE</span>
       <h2 class="cta-h split-target reveal">
-        Pronto para tomar decisões
-        baseadas em <span class="heat-pulse">dados</span><br>
-        e não em achismos?
+        Bora tomar decisões baseadas em <span class="heat-pulse">dados?</span>
       </h2>
       <p class="cta-sub reveal line-reveal">
-        Agende uma conversa com nossos especialistas. Vamos entender o seu contexto,
-        aplicar nosso Fit Score e descobrir se o seu desafio de produto está pronto
-        para a nossa esteira de Inovação.
+        Agende uma conversa para levar o seu produto para o Laboratório de Inovação.
       </p>
       <a href="https://cal.com/tallerinnovation" target="_blank" rel="noopener" class="btn btn-primary btn-xl btn-final magnetic" id="finalBtn">
-        Falar com a Taller Innovation →
+        Falar com especialista →
       </a>
     </div>
   </section>
@@ -2836,7 +2510,7 @@
       });
     }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-    const revealEls = document.querySelectorAll('.reveal, .err-card, .benefit');
+    const revealEls = document.querySelectorAll('.reveal, .err-card, .bento-card, .benefit');
     revealEls.forEach(el => revealObs.observe(el));
 
     /* Fallback: on scroll, force-check visibility for elements that observer might have missed */
@@ -2992,131 +2666,47 @@
     }
 
     /* ═══════════════════════════════════════════
-       6. PHASES NAVIGATOR
+       6. BENTO GRID
     ═══════════════════════════════════════════ */
-    (function () {
-      const tabs      = Array.from(document.querySelectorAll('.pnav-tab'));
-      const slides    = Array.from(document.querySelectorAll('.phase-slide'));
-      const progFill  = document.querySelector('.pnav-progress-fill');
-      const DURATION  = 5000;
+    const bentoGrid = document.getElementById('bentoGrid');
 
-      let current  = 0;
-      let autoTimer = null;
-      let paused   = false;
-      let touchX0  = 0;
-
-      function goTo(next, dir) {
-        if (next === current || next < 0 || next >= tabs.length) return;
-        const prev = current;
-        current = next;
-
-        /* Update tabs */
-        tabs[prev].classList.remove('active');
-        tabs[prev].setAttribute('aria-selected', 'false');
-        tabs[current].classList.add('active');
-        tabs[current].setAttribute('aria-selected', 'true');
-
-        /* Animate slides */
-        const prevSlide = slides[prev];
-        const nextSlide = slides[current];
-
-        /* Exit current */
-        prevSlide.classList.remove('active');
-        prevSlide.classList.add('exit-left');
-        prevSlide.addEventListener('transitionend', () => {
-          prevSlide.classList.remove('exit-left');
-        }, { once: true });
-
-        /* Enter next — start from correct side */
-        nextSlide.style.transition = 'none';
-        nextSlide.style.transform  = `translateX(${dir >= 0 ? 28 : -28}px)`;
-        nextSlide.style.opacity    = '0';
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          nextSlide.style.transition = '';
-          nextSlide.style.transform  = '';
-          nextSlide.style.opacity    = '';
-          nextSlide.classList.add('active');
-        }));
-
-        resetProgress();
-      }
-
-      function advance() {
-        goTo((current + 1) % tabs.length, 1);
-      }
-
-      function resetProgress() {
-        if (!progFill) return;
-        progFill.style.transition = 'none';
-        progFill.style.width = '0%';
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          progFill.style.transition = `width ${DURATION}ms linear`;
-          progFill.style.width = '100%';
-        }));
-      }
-
-      function startAuto() {
-        clearInterval(autoTimer);
-        autoTimer = setInterval(() => { if (!paused) advance(); }, DURATION);
-      }
-
-      /* Kick off */
-      resetProgress();
-      startAuto();
-
-      /* Tab clicks */
-      tabs.forEach((tab, i) => {
-        tab.addEventListener('click', () => {
-          goTo(i, i > current ? 1 : -1);
-          startAuto();
+    /* Spotlight per-card */
+    if (isDesktop && !prefersReducedMotion) {
+      document.querySelectorAll('.bento-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty('--cx', `${e.clientX - rect.left}px`);
+          card.style.setProperty('--cy', `${e.clientY - rect.top}px`);
         });
       });
+    }
 
-      /* "Next phase" button inside slides */
-      document.querySelectorAll('.phase-next-btn').forEach((btn, i) => {
-        btn.addEventListener('click', () => {
-          goTo(i + 1, 1);
-          startAuto();
-        });
-      });
-
-      /* Pause on hover */
-      ['.phases-panel', '.phases-nav'].forEach(sel => {
-        const el = document.querySelector(sel);
-        if (!el) return;
-        el.addEventListener('mouseenter', () => { paused = true; });
-        el.addEventListener('mouseleave', () => { paused = false; });
-      });
-
-      /* Keyboard arrow navigation */
-      document.querySelector('.phases-nav-track')
-        ?.addEventListener('keydown', e => {
-          if (e.key === 'ArrowRight') { goTo(Math.min(current + 1, tabs.length - 1), 1); tabs[current]?.focus(); }
-          if (e.key === 'ArrowLeft')  { goTo(Math.max(current - 1, 0), -1);             tabs[current]?.focus(); }
-        });
-
-      /* Touch swipe on panel */
-      const panel = document.querySelector('.phases-panel');
-      panel?.addEventListener('touchstart', e => { touchX0 = e.touches[0].clientX; }, { passive: true });
-      panel?.addEventListener('touchend',   e => {
-        const dx = touchX0 - e.changedTouches[0].clientX;
-        if (Math.abs(dx) > 48) {
-          goTo(dx > 0 ? Math.min(current + 1, tabs.length - 1) : Math.max(current - 1, 0), dx > 0 ? 1 : -1);
-          startAuto();
+    /* Number scramble on reveal */
+    const scrambleObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const final = el.dataset.scramble;
+          const delay = parseInt(el.closest('.bento-card')?.dataset.stagger || '0');
+          setTimeout(() => scrambleNumber(el, final), delay);
+          scrambleObs.unobserve(el);
         }
-      }, { passive: true });
+      });
+    }, { threshold: 0.5 });
 
-      /* Reveal when section enters viewport */
-      const phasesNav = document.querySelector('.phases-nav');
-      if (phasesNav) {
-        new IntersectionObserver(([entry]) => {
-          if (entry.isIntersecting) {
-            phasesNav.classList.add('in');
-            resetProgress();
-          }
-        }, { threshold: 0.15 }).observe(phasesNav);
-      }
-    }());
+    document.querySelectorAll('[data-scramble]').forEach((el, i) => {
+      el.closest('.bento-card').dataset.stagger = i * 120;
+      scrambleObs.observe(el);
+    });
+
+    /* Diagonal stagger for bento cards */
+    const bentoCards = document.querySelectorAll('.bento-card');
+    bentoCards.forEach((card, i) => {
+      const col = i % 2;
+      const row = Math.floor(i / 2);
+      const delay = (col + row) * 100;
+      card.style.transitionDelay = `${delay}ms`;
+    });
 
     /* Diagonal stagger for benefits */
     document.querySelectorAll('.benefit').forEach((b, i) => {
