@@ -197,7 +197,7 @@
       transition: opacity 0.35s ease;
     }
 
-    .loader-logo img {
+    .loader-logo .logo-svg {
       height: 48px;
       width: auto;
       display: block;
@@ -472,7 +472,7 @@
       justify-content: center;
     }
 
-    .nav-logo img {
+    .nav-logo .logo-svg {
       height: 28px;
       width: auto;
       display: block;
@@ -499,15 +499,36 @@
     /* ══ REVEAL SYSTEM ══ */
     .reveal {
       opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+      transform: translateY(32px);
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
     }
-
-    .reveal.in {
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-36px);
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(36px);
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.94);
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .reveal.in, .reveal-left.in, .reveal-right.in, .reveal-scale.in {
       opacity: 1;
-      transform: translateY(0);
+      transform: none;
     }
-
     .reveal.out {
       opacity: 0;
       transform: translateY(-20px);
@@ -833,7 +854,7 @@
 
     /* err-card: scan-line top edge + subtle heat tint on hover */
     .err-card {
-      transition: opacity 0.8s var(--ease), transform 0.8s var(--ease), background 0.4s var(--ease), border-color 0.4s var(--ease);
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s var(--ease), border-color 0.4s var(--ease);
     }
 
     .err-card::before {
@@ -929,8 +950,13 @@
     .guia-visual {
       position: relative;
       aspect-ratio: 4/5;
-      background: var(--carbon);
-      border: var(--border);
+      background: rgba(14, 12, 18, 0.5);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(249, 180, 80, 0.18);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04) inset,
+        0 24px 60px rgba(0,0,0,0.6);
       overflow: hidden;
     }
 
@@ -938,16 +964,20 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse at 35% 45%, rgba(249, 201, 114, 0.07) 0%, transparent 55%),
-        linear-gradient(180deg, var(--carbon) 0%, #080808 100%);
+        radial-gradient(ellipse at 20% 20%, rgba(230, 76, 40, 0.13) 0%, transparent 45%),
+        radial-gradient(ellipse at 80% 70%, rgba(249, 180, 80, 0.09) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(249, 201, 114, 0.05) 0%, transparent 70%),
+        linear-gradient(160deg, rgba(22, 18, 28, 0.8) 0%, rgba(8, 6, 12, 0.95) 100%);
     }
 
     .guia-halftone::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-image: radial-gradient(circle, rgba(135, 135, 135, 0.22) 1px, transparent 1px);
+      background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
       background-size: 8px 8px;
+      mask-image: radial-gradient(ellipse at 50% 40%, black 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at 50% 40%, black 30%, transparent 75%);
     }
 
     .guia-halftone::after {
@@ -956,8 +986,8 @@
       bottom: 0;
       left: 0;
       right: 0;
-      height: 45%;
-      background: linear-gradient(to top, var(--black), transparent);
+      height: 50%;
+      background: linear-gradient(to top, rgba(8, 6, 12, 0.95), transparent);
     }
 
     .guia-gold-accent {
@@ -968,26 +998,102 @@
       height: 56px;
       border: 2px solid var(--heat);
       transform: rotate(45deg);
-      opacity: 0.55;
+      opacity: 0.9;
+      box-shadow:
+        0 0 10px rgba(230, 76, 40, 0.7),
+        0 0 30px rgba(230, 76, 40, 0.35),
+        0 0 60px rgba(249, 180, 80, 0.12),
+        inset 0 0 10px rgba(230, 76, 40, 0.15);
+      animation: diamond-pulse 3.5s ease-in-out infinite;
     }
 
-    .guia-caption {
-      position: absolute;
-      bottom: 28px;
-      left: 28px;
-      right: 28px;
+    @keyframes diamond-pulse {
+      0%, 100% {
+        box-shadow:
+          0 0 10px rgba(230, 76, 40, 0.7),
+          0 0 30px rgba(230, 76, 40, 0.35),
+          0 0 60px rgba(249, 180, 80, 0.12),
+          inset 0 0 10px rgba(230, 76, 40, 0.15);
+        opacity: 0.9;
+        transform: rotate(45deg) scale(1);
+      }
+      50% {
+        box-shadow:
+          0 0 18px rgba(230, 76, 40, 1),
+          0 0 52px rgba(230, 76, 40, 0.55),
+          0 0 90px rgba(249, 180, 80, 0.22),
+          inset 0 0 16px rgba(230, 76, 40, 0.3);
+        opacity: 1;
+        transform: rotate(45deg) scale(1.1);
+      }
+    }
+
+    /* ══ GUIA — PHASES GRID ══ */
+    .guia-phases {
+      position: relative;
       z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      height: 100%;
     }
 
-    .guia-caption h3 {
-      font-size: 1.1rem;
-      color: var(--white);
+    .phase-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      transition: border-color 0.35s var(--ease), background 0.35s var(--ease);
+      cursor: default;
     }
 
-    .guia-caption p {
-      font-size: 0.78rem;
-      color: var(--graphite);
-      margin-top: 4px;
+    .phase-card:hover {
+      border-color: rgba(230, 76, 40, 0.28);
+      background: rgba(230, 76, 40, 0.05);
+    }
+
+    .phase-icon {
+      width: 120px;
+      height: 120px;
+      flex-shrink: 0;
+      color: var(--heat);
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* mantém stroke em pixels físicos independente do zoom do SVG */
+    .phase-icon * {
+      vector-effect: non-scaling-stroke;
+      stroke-width: 1.5;
+    }
+
+    .phase-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      text-align: center;
+    }
+
+    .phase-num {
+      font-family: var(--pixel);
+      font-size: 0.6rem;
+      color: var(--heat);
+      letter-spacing: 0.12em;
+    }
+
+    .phase-name {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1.4;
     }
 
     /* ══════════════════════════════════
@@ -1050,17 +1156,38 @@
       transform: translateY(0);
     }
 
+    /* scan-line top edge — mesmo efeito do tcard */
+    .bento-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--heat), var(--gold), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.6s var(--ease);
+      z-index: 2;
+    }
+
+    .bento-card:hover {
+      background: rgba(230, 76, 40, 0.04);
+    }
+
+    .bento-card:hover::before {
+      transform: scaleX(1);
+    }
+
     .bento-card::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(
-        120px circle at var(--cx, 50%) var(--cy, 50%),
-        rgba(230, 76, 40, 0.09),
-        transparent 70%
-      );
+      background:
+        radial-gradient(120px circle at var(--cx, 50%) var(--cy, 50%), rgba(230, 76, 40, 0.09), transparent 70%),
+        linear-gradient(145deg, rgba(230, 76, 40, 0.05) 0%, transparent 55%);
       opacity: 0;
-      transition: opacity 0.4s var(--ease);
+      transition: opacity 0.5s var(--ease);
       pointer-events: none;
       z-index: 0;
     }
@@ -1111,6 +1238,11 @@
       font-size: 0.88rem;
       color: var(--graphite);
       line-height: 1.7;
+      transition: color 0.4s var(--ease);
+    }
+
+    .bento-card:hover p {
+      color: var(--silver);
     }
 
     /* ══════════════════════════════════
@@ -1669,7 +1801,7 @@
       filter: grayscale(0%);
     }
 
-    .footer-logo img {
+    .footer-logo .logo-svg {
       height: 20px;
       width: auto;
       display: block;
@@ -1711,8 +1843,7 @@
     }
 
     /* ══ SECTION TITLE BLINKING CURSOR ══ */
-    .section-title::after {
-      content: '█';
+    .title-cursor {
       font-family: var(--pixel);
       font-size: 0.58em;
       color: var(--heat);
@@ -1722,7 +1853,7 @@
       opacity: 0;
     }
 
-    .section-title.cursor-active::after {
+    .section-title.cursor-active .title-cursor {
       animation: blink 1s step-end infinite;
     }
 
@@ -1807,7 +1938,7 @@
         animation: none;
       }
 
-      .section-title::after {
+      .title-cursor {
         display: none;
       }
     }
@@ -1921,11 +2052,34 @@
 
 <body class="loading">
 
+  <!-- LOGO SPRITE — inline para evitar bloqueio de file:// no Chrome -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <defs>
+      <linearGradient id="logo-grad-fire" x1="60.472" y1="3.42969" x2="60.472" y2="217.879" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#FFB021"/>
+        <stop offset="1" stop-color="#F56F10"/>
+      </linearGradient>
+      <linearGradient id="logo-grad-stroke" x1="2" y1="111.455" x2="118.944" y2="109.854" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#F56F10"/>
+        <stop offset="1" stop-color="#F9C972"/>
+      </linearGradient>
+    </defs>
+    <symbol id="logo-taller" viewBox="0 0 554 222" fill="none">
+      <path d="M107.103 75.9443C124.225 93.468 124.225 121.609 107.103 139.133L107.099 139.137L55.877 191.039C48.8958 198.697 43.889 208.422 40.8799 218.174L40.4561 219.548L39.3154 218.673C37.4022 217.204 34.7069 215.528 32.6133 213.386L32.1064 212.866C14.9843 195.342 14.9843 167.201 32.1064 149.678L32.1133 149.671L105.68 75.9375L106.395 75.2207L107.103 75.9443ZM81.6289 2.63672C83.4512 4.03547 85.9818 5.62291 88.0273 7.62207H88.5439L88.8379 7.92285C105.96 25.4466 105.96 53.5876 88.8379 71.1113L88.833 71.1162L15.2676 145.369L14.5518 146.091L13.8418 145.364C-3.28039 127.841 -3.28039 99.6995 13.8418 82.1758L13.8447 82.1719L65.0879 30.2471C72.5592 22.599 77.5526 12.8963 80.0508 3.18066L80.4277 1.71484L81.6289 2.63672Z" fill="url(#logo-grad-fire)" stroke="url(#logo-grad-stroke)" stroke-width="2"/>
+      <path d="M298.187 84.6919C278.908 72.7492 251.511 80.0187 243.901 83.1342C240.857 84.1727 241.364 88.3266 242.886 92.9999C243.901 97.1539 245.93 102.346 245.93 102.346C245.93 102.346 265.21 95.0769 278.401 99.7501C281.952 100.789 283.474 103.385 282.459 112.212C282.459 112.212 255.063 108.058 241.871 118.443C237.305 122.078 233.754 129.347 233.754 137.136C233.754 164.137 265.717 164.137 271.298 164.137C283.981 164.137 294.128 162.06 301.231 157.387C303.261 155.829 309.349 153.233 309.349 142.328V104.423C308.842 98.7116 306.812 89.8844 298.187 84.6919ZM270.79 143.886C260.643 143.886 259.629 138.694 259.629 136.617C259.629 134.54 261.658 128.828 269.776 128.309C278.401 127.79 281.952 128.309 281.952 128.309V141.809C280.937 141.809 277.386 143.886 270.79 143.886Z" fill="white"/>
+      <path d="M475.246 88.3291C466.621 79.5019 455.46 78.4634 449.879 78.4634C445.313 78.4634 432.122 78.9826 421.975 88.3291C410.813 99.2333 409.291 112.734 409.291 120.003C409.291 150.12 429.585 164.139 454.445 164.139C457.996 164.139 468.651 164.139 477.276 159.985C479.305 158.947 480.32 157.908 481.335 157.389C483.364 155.831 481.335 150.12 479.812 146.485C478.29 142.331 476.768 140.254 476.768 140.254C475.246 140.773 466.621 143.369 456.474 143.369C442.269 143.369 435.673 135.581 435.673 129.869H474.739C480.827 129.869 485.901 125.196 485.901 118.445C486.408 108.061 483.871 96.6371 475.246 88.3291ZM436.688 111.695C436.688 110.138 437.703 98.7141 451.401 98.7141C456.474 98.7141 464.085 101.31 464.085 111.695H436.688Z" fill="white"/>
+      <path d="M338.263 56.1333C327.609 56.1333 324.564 57.691 324.564 57.691V157.387C324.564 161.541 329.131 164.137 338.263 164.137C348.917 164.137 351.961 162.579 351.961 162.579V63.4028C351.961 58.7295 347.395 56.1333 338.263 56.1333Z" fill="white"/>
+      <path d="M381.388 56.1333C370.734 56.1333 367.689 57.691 367.689 57.691V157.387C367.689 161.541 372.256 164.137 381.388 164.137C392.042 164.137 395.086 162.579 395.086 162.579V63.4028C395.086 58.7295 390.52 56.1333 381.388 56.1333Z" fill="white"/>
+      <path d="M500.104 157.386C500.104 161.54 504.67 164.656 513.802 164.656C524.456 164.656 527.5 163.098 527.5 163.098V109.096C527.5 105.462 529.53 102.346 534.096 102.346H550.838C554.897 102.346 553.883 95.5959 553.883 88.8457C553.883 82.0955 553.375 80.0185 552.868 79.4992L552.36 78.98H527.5C510.758 79.4992 500.104 88.8457 500.104 100.269C500.104 100.269 500.104 155.829 500.104 157.386Z" fill="white"/>
+      <path d="M219.543 161.542C222.08 160.504 223.095 159.985 224.11 159.465C226.646 157.908 224.617 152.196 223.602 147.523C222.588 142.849 221.066 140.253 221.066 140.253C219.543 140.772 216.499 141.811 211.426 141.811C208.382 141.811 201.279 141.292 201.279 134.022V105.983H217.514C221.066 105.983 220.558 100.271 220.558 94.04C220.558 85.732 219.543 85.2128 219.543 85.2128H201.279C201.279 85.2128 201.279 73.2701 201.279 71.7123C201.279 67.5584 196.713 64.4429 187.58 64.4429C176.926 64.4429 173.882 66.0006 173.882 66.0006V85.2128C173.882 85.2128 163.735 87.2898 161.198 88.3283C161.198 88.3283 160.184 91.4438 160.184 95.5978C160.184 98.7132 160.691 105.983 162.72 105.983H173.882V136.618C173.882 146.484 176.419 153.754 181.492 158.427C186.566 163.1 194.176 165.177 203.308 165.177C208.889 164.658 214.977 163.1 219.543 161.542Z" fill="white"/>
+    </symbol>
+  </svg>
+
   <!-- LOADER -->
   <div id="loader" class="active">
     <div class="loader-half loader-left"></div>
     <div class="loader-half loader-right"></div>
-    <div class="loader-logo"><img src="logo.svg" alt="Taller Innovation" /></div>
+    <div class="loader-logo"><svg class="logo-svg" role="img" aria-label="Taller Innovation"><use href="#logo-taller"/></svg></div>
   </div>
 
   <!-- SCROLL PROGRESS -->
@@ -1952,9 +2106,9 @@
   <!-- NAV -->
   <nav>
     <a href="#hero" class="nav-logo" aria-label="Taller Innovation">
-      <img src="logo.svg" alt="Taller Innovation" />
+      <svg class="logo-svg" role="img" aria-label="Taller Innovation"><use href="#logo-taller"/></svg>
     </a>
-    <a href="#cta-final" class="nav-link">[ FALAR COM ESPECIALISTA ]</a>
+    <a href="#cta-final" class="nav-link">[ falar com especialista ]</a>
   </nav>
 
   <!-- ══════════════════════════════════════
@@ -1981,10 +2135,10 @@
       <div class="hero-ctas reveal">
         <a href="#cta-final" class="btn btn-primary btn-lg magnetic">
           <span class="bracket">[</span>
-          Agendar Avaliação
+          agendar avaliação
           <span class="bracket">]</span>
         </a>
-        <a href="#plano" class="btn btn-secondary magnetic">Ver a Metodologia</a>
+        <a href="#plano" class="btn btn-secondary magnetic">ver a metodologia</a>
       </div>
     </div>
 
@@ -2071,25 +2225,70 @@
         <div class="guia-text">
           <span class="label reveal">// SYS_RESPONSE: A SOLUÇÃO</span>
           <h2 class="split-target reveal">Seu laboratório de <span class="heat-pulse">Inovação.</span></h2>
-          <p class="reveal line-reveal">
-            Para sobreviver nesse cenário e parar de construir autoestradas que dão direto num abismo,
-            pare agora de sobrecarregar seu time para criar um fluxo onde o trabalho é puxado por quem bota
-            a mão na massa, e só quando uma capacidade real é liberada.
-            A gente assume o risco financeiro para validar o que realmente tem potencial de venda.
+          <p class="reveal">
+            Pare agora de sobrecarregar seu time. Valide o que realmente tem potencial de venda, enquanto reduza o risco financeiro.
           </p>
           <a href="#cta-final" class="btn btn-primary reveal magnetic">
             <span class="bracket">[</span>
-            Quero parar de queimar dinheiro
+            parar de queimar dinheiro
             <span class="bracket">]</span>
           </a>
         </div>
 
-        <div class="guia-visual reveal">
+        <div class="guia-visual reveal-right">
           <div class="guia-halftone"></div>
-          <div class="guia-gold-accent"></div>
-          <div class="guia-caption">
-            <h3>Laboratório de Inovação</h3>
-            <p>// Pesquisa · Validação de Mercado · Governança Executiva · Prototipagem</p>
+          <div class="guia-phases">
+
+            <!-- 01 Imersão — lucide: search -->
+            <div class="phase-card">
+              <svg class="phase-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <div class="phase-label">
+                <span class="phase-num">01</span>
+                <span class="phase-name">Imersão</span>
+              </div>
+            </div>
+
+            <!-- 02 Inteligência — lucide: trending-up -->
+            <div class="phase-card">
+              <svg class="phase-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+                <polyline points="16 7 22 7 22 13"/>
+              </svg>
+              <div class="phase-label">
+                <span class="phase-num">02</span>
+                <span class="phase-name">Inteligência</span>
+              </div>
+            </div>
+
+            <!-- 03 Estratégia — lucide: target -->
+            <div class="phase-card">
+              <svg class="phase-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10"/>
+                <circle cx="12" cy="12" r="6"/>
+                <circle cx="12" cy="12" r="2"/>
+              </svg>
+              <div class="phase-label">
+                <span class="phase-num">03</span>
+                <span class="phase-name">Estratégia</span>
+              </div>
+            </div>
+
+            <!-- 04 Tangibilização — lucide: layers -->
+            <div class="phase-card">
+              <svg class="phase-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                <polyline points="2 17 12 22 22 17"/>
+                <polyline points="2 12 12 17 22 12"/>
+              </svg>
+              <div class="phase-label">
+                <span class="phase-num">04</span>
+                <span class="phase-name">Tangibilização</span>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -2219,7 +2418,7 @@
       </div>
 
       <div class="testimonials">
-        <div class="tcard reveal">
+        <div class="tcard reveal-left">
           <div class="tcard-quote">"</div>
           <p class="tcard-text">
             "A Taller nos ajudou a economizar meses de desenvolvimento. Antes de escrever uma linha de código, já
@@ -2238,7 +2437,7 @@
           </div>
         </div>
 
-        <div class="tcard reveal">
+        <div class="tcard reveal-right">
           <div class="tcard-quote">"</div>
           <p class="tcard-text">
             "Chegamos à Taller com uma hipótese que julgávamos certeira. Após a imersão e as entrevistas, descobrimos
@@ -2292,7 +2491,7 @@
         Agende uma conversa para levar o seu produto para o Laboratório de Inovação.
       </p>
       <a href="https://cal.com/tallerinnovation" target="_blank" rel="noopener" class="btn btn-primary btn-xl btn-final magnetic" id="finalBtn">
-        Falar com especialista →
+        falar com especialista →
       </a>
     </div>
   </section>
@@ -2300,7 +2499,7 @@
   <!-- FOOTER -->
   <footer>
     <div style="display:flex;align-items:center;gap:12px">
-      <span class="footer-logo"><img src="logo.svg" alt="Taller Innovation" /></span>
+      <span class="footer-logo"><svg class="logo-svg" role="img" aria-label="Taller Innovation"><use href="#logo-taller"/></svg></span>
       <span class="footer-copy" style="opacity: 0.6">© 2026</span>
     </div>
     <span class="footer-copy">// Future Relics — Taller '26</span>
@@ -2350,16 +2549,23 @@
             });
           } else if (child.nodeType === 1) { /* element node — clone and recurse */
             const clone = child.cloneNode(false);
-            const innerFrag = processNode(child);
-            clone.appendChild(innerFrag);
-            /* Wrap the element in a word span if it isn't whitespace-only */
-            if (clone.textContent.trim()) {
-              const wordWrap = document.createElement('span');
-              wordWrap.className = 'word';
-              wordWrap.appendChild(clone);
-              frag.appendChild(wordWrap);
-            } else {
+            /* Don't split gradient-clipped elements — breaking text into inline-block
+               .char spans makes background-clip:text invisible in Firefox. */
+            if (child.classList.contains('heat-pulse')) {
+              child.childNodes.forEach(n => clone.appendChild(n.cloneNode(true)));
               frag.appendChild(clone);
+            } else {
+              const innerFrag = processNode(child);
+              clone.appendChild(innerFrag);
+              /* Wrap the element in a word span if it isn't whitespace-only */
+              if (clone.textContent.trim()) {
+                const wordWrap = document.createElement('span');
+                wordWrap.className = 'word';
+                wordWrap.appendChild(clone);
+                frag.appendChild(wordWrap);
+              } else {
+                frag.appendChild(clone);
+              }
             }
           }
         });
@@ -2510,7 +2716,7 @@
       });
     }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-    const revealEls = document.querySelectorAll('.reveal, .err-card, .bento-card, .benefit');
+    const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .err-card, .bento-card, .benefit');
     revealEls.forEach(el => revealObs.observe(el));
 
     /* Fallback: on scroll, force-check visibility for elements that observer might have missed */
@@ -2575,53 +2781,97 @@
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
+    /* Particle depth layers: 0=far(slow/dim), 1=mid, 2=near(fast/bright) */
+    const LAYER_CFG = [
+      { speed: 0.00022, size: [0.8, 1.2],  opacity: [0.25, 0.38], connectR: 0.55 },
+      { speed: 0.00042, size: [1.3, 1.9],  opacity: [0.42, 0.58], connectR: 0.80 },
+      { speed: 0.00072, size: [2.0, 2.8],  opacity: [0.65, 0.85], connectR: 1.00 },
+    ];
+
     let PARTICLES = [];
     function initParticles() {
       PARTICLES = [];
       const parent = canvas.parentElement || document.body;
       const area = parent.offsetWidth * parent.offsetHeight;
-      const count = Math.min(220, Math.max(80, Math.floor(area / 16000)));
+      const total = Math.min(210, Math.max(70, Math.floor(area / 14000)));
 
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < total; i++) {
+        const layer = i % 3;
+        const cfg = LAYER_CFG[layer];
+        const angle = Math.random() * Math.PI * 2;
+        const speed = cfg.speed * (0.7 + Math.random() * 0.6);
+        const [sMin, sMax] = cfg.size;
+        const [oMin, oMax] = cfg.opacity;
         PARTICLES.push({
           x: Math.random(), y: Math.random(),
-          vx: (Math.random() - 0.5) * 0.0005,
-          vy: (Math.random() - 0.5) * 0.0005,
-          s: Math.random() * 1.8 + 0.8,
-          o: Math.random() * 0.5 + 0.2,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          s: sMin + Math.random() * (sMax - sMin),
+          o: oMin + Math.random() * (oMax - oMin),
+          layer,
         });
       }
     }
     initParticles();
     window.addEventListener('resize', initParticles);
 
+    /* Mouse tracking for magnetic effect */
+    let pMouseX = -9999, pMouseY = -9999;
+    const heroElForMouse = document.getElementById('hero');
+    heroElForMouse.addEventListener('mousemove', e => {
+      const r = heroElForMouse.getBoundingClientRect();
+      pMouseX = e.clientX - r.left;
+      pMouseY = e.clientY - r.top;
+    });
+    heroElForMouse.addEventListener('mouseleave', () => { pMouseX = -9999; pMouseY = -9999; });
+
+    const BASE_CONNECT = 150;
+
     function animateCanvas() {
       const W = canvas.offsetWidth, H = canvas.offsetHeight;
       ctx.clearRect(0, 0, W, H);
 
-      const connectRadius = Math.max(160, Math.min(W, H) * 0.22);
+      const magnetR = 110;
+      const magnetF = 0.09;
 
       PARTICLES.forEach(p => {
+        /* Magnetic attraction toward cursor */
+        const px = p.x * W, py = p.y * H;
+        const mdx = pMouseX - px, mdy = pMouseY - py;
+        const md = Math.sqrt(mdx * mdx + mdy * mdy);
+        if (md < magnetR && md > 0) {
+          const force = (1 - md / magnetR) * magnetF * (1 + p.layer * 0.4);
+          p.x += (mdx / md) * force / W;
+          p.y += (mdy / md) * force / H;
+        }
+
         p.x += p.vx; p.y += p.vy;
         if (p.x < 0) p.x = 1; if (p.x > 1) p.x = 0;
         if (p.y < 0) p.y = 1; if (p.y > 1) p.y = 0;
+
         ctx.beginPath();
         ctx.arc(p.x * W, p.y * H, p.s, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(160,160,160,${p.o})`;
+        ctx.fillStyle = `rgba(255,255,255,${p.o})`;
         ctx.fill();
       });
 
+      /* Connect only same/adjacent layers, respecting depth radius */
       for (let i = 0; i < PARTICLES.length; i++) {
+        const pi = PARTICLES[i];
         for (let j = i + 1; j < PARTICLES.length; j++) {
-          const dx = (PARTICLES[i].x - PARTICLES[j].x) * W;
-          const dy = (PARTICLES[i].y - PARTICLES[j].y) * H;
+          const pj = PARTICLES[j];
+          if (Math.abs(pi.layer - pj.layer) > 1) continue;
+          const maxLayer = Math.max(pi.layer, pj.layer);
+          const cr = BASE_CONNECT * LAYER_CFG[maxLayer].connectR;
+          const dx = (pi.x - pj.x) * W, dy = (pi.y - pj.y) * H;
           const d = Math.sqrt(dx * dx + dy * dy);
-          if (d < connectRadius) {
+          if (d < cr) {
+            const alpha = (1 - d / cr) * (0.18 + maxLayer * 0.1);
             ctx.beginPath();
-            ctx.moveTo(PARTICLES[i].x * W, PARTICLES[i].y * H);
-            ctx.lineTo(PARTICLES[j].x * W, PARTICLES[j].y * H);
-            ctx.strokeStyle = `rgba(160,160,160,${(1 - d / connectRadius) * 0.35})`;
-            ctx.lineWidth = 1.2;
+            ctx.moveTo(pi.x * W, pi.y * H);
+            ctx.lineTo(pj.x * W, pj.y * H);
+            ctx.strokeStyle = `rgba(255,255,255,${Math.min(alpha, 0.6)})`;
+            ctx.lineWidth = 0.5 + maxLayer * 0.5;
             ctx.stroke();
           }
         }
@@ -3004,7 +3254,7 @@
       /* Start after entrance animations settle, then repeat every 12s */
       setTimeout(() => {
         pulseAllHeadings();
-        setInterval(pulseAllHeadings, 12000);
+        setInterval(pulseAllHeadings, 25000);
       }, 4500);
 
       /* ── Visibility guard: reset any stuck scrambled state when tab regains focus ── */
@@ -3044,7 +3294,12 @@
 
       /* Mark all section titles */
       Object.values(sectionTitleMap).forEach(el => {
-        if (el) el.classList.add('section-title');
+        if (!el) return;
+        el.classList.add('section-title');
+        const cur = document.createElement('span');
+        cur.className = 'title-cursor';
+        cur.textContent = '█';
+        el.appendChild(cur);
       });
 
       /* Same rootMargin as sectionObs so cursor tracks active section */
