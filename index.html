@@ -270,19 +270,68 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
+      align-items: flex-end;
     }
 
+    /* collapsed state: thin dash */
     .snav-dot {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      cursor: none;
+      position: relative;
+    }
+
+    .snav-dot__bar {
       width: 2px;
       height: 16px;
       background: var(--graphite-30);
       border-radius: 1px;
-      transition: height 0.5s var(--ease), background 0.5s var(--ease);
+      flex-shrink: 0;
+      transition: height 0.4s var(--ease), background 0.4s var(--ease), width 0.4s var(--ease);
     }
 
-    .snav-dot.active {
+    .snav-dot.active .snav-dot__bar {
       height: 28px;
       background: var(--heat);
+    }
+
+    /* label — hidden by default */
+    .snav-dot__label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--graphite);
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateX(8px);
+      transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), color 0.3s var(--ease);
+      pointer-events: none;
+    }
+
+    /* expanded on hover of the whole nav */
+    #section-nav:hover .snav-dot__label {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    #section-nav:hover .snav-dot__bar {
+      width: 3px;
+    }
+
+    .snav-dot.active .snav-dot__label {
+      color: var(--white);
+    }
+
+    .snav-dot:hover .snav-dot__label {
+      color: var(--gold);
+    }
+
+    .snav-dot:hover .snav-dot__bar {
+      background: var(--gold);
     }
 
     /* ══ BUTTONS — Design System ══ */
@@ -2104,13 +2153,34 @@
 
   <!-- SECTION NAV -->
   <div id="section-nav">
-    <div class="snav-dot active" data-target="hero"></div>
-    <div class="snav-dot" data-target="problema"></div>
-    <div class="snav-dot" data-target="guia"></div>
-    <div class="snav-dot" data-target="plano"></div>
-    <div class="snav-dot" data-target="resultados"></div>
-    <div class="snav-dot" data-target="social"></div>
-    <div class="snav-dot" data-target="cta-final"></div>
+    <div class="snav-dot active" data-target="hero">
+      <span class="snav-dot__label">Início</span>
+      <div class="snav-dot__bar"></div>
+    </div>
+    <div class="snav-dot" data-target="problema">
+      <span class="snav-dot__label">O Problema</span>
+      <div class="snav-dot__bar"></div>
+    </div>
+    <div class="snav-dot" data-target="guia">
+      <span class="snav-dot__label">Laboratório</span>
+      <div class="snav-dot__bar"></div>
+    </div>
+    <div class="snav-dot" data-target="plano">
+      <span class="snav-dot__label">Metodologia</span>
+      <div class="snav-dot__bar"></div>
+    </div>
+    <div class="snav-dot" data-target="resultados">
+      <span class="snav-dot__label">Resultados</span>
+      <div class="snav-dot__bar"></div>
+    </div>
+    <div class="snav-dot" data-target="social">
+      <span class="snav-dot__label">Clientes</span>
+      <div class="snav-dot__bar"></div>
+    </div>
+    <div class="snav-dot" data-target="cta-final">
+      <span class="snav-dot__label">Contato</span>
+      <div class="snav-dot__bar"></div>
+    </div>
   </div>
 
   <!-- NAV -->
@@ -2635,11 +2705,11 @@
       });
 
       document.addEventListener('mouseover', e => {
-        const target = e.target.closest('a, button, .btn, .btn-final, .pnav-tab, .tcard, .nav-link, .phase-next-btn');
+        const target = e.target.closest('a, button, .btn, .btn-final, .pnav-tab, .tcard, .nav-link, .phase-next-btn, .snav-dot');
         if (target) ring.classList.add('hovering');
       });
       document.addEventListener('mouseout', e => {
-        const target = e.target.closest('a, button, .btn, .btn-final, .pnav-tab, .tcard, .nav-link, .phase-next-btn');
+        const target = e.target.closest('a, button, .btn, .btn-final, .pnav-tab, .tcard, .nav-link, .phase-next-btn, .snav-dot');
         if (target) ring.classList.remove('hovering');
       });
 
@@ -2688,6 +2758,14 @@
     sections.forEach(id => {
       const el = document.getElementById(id);
       if (el) sectionObs.observe(el);
+    });
+
+    /* Section nav — click to scroll */
+    document.querySelectorAll('.snav-dot').forEach(dot => {
+      dot.addEventListener('click', () => {
+        const target = document.getElementById(dot.dataset.target);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     });
 
     /* Enhanced reveal observer (bidirectional) */
