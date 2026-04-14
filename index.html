@@ -702,7 +702,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       will-change: transform;
     }
 
@@ -1131,7 +1131,7 @@
 
     .phase-num {
       font-family: var(--pixel);
-      font-size: 0.84rem;
+      font-size: 1.1rem;
       color: var(--heat);
       letter-spacing: 0.12em;
       transition: color 0.3s var(--ease);
@@ -1139,7 +1139,7 @@
 
     .phase-name {
       font-family: var(--mono);
-      font-size: 0.87rem;
+      font-size: 1.05rem;
       color: rgba(255, 255, 255, 0.75);
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -1304,6 +1304,133 @@
       color: var(--silver);
     }
 
+    /* ══ DELIVERY BRIDGE ══ */
+    .delivery-bridge {
+      background: var(--black);
+      border-top: 1px solid rgba(230, 76, 40, 0.35);
+      border-bottom: var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .delivery-bridge::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(230, 76, 40, 0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .delivery-bridge-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 44px 60px;
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .delivery-left {
+      flex: 1;
+    }
+
+    .delivery-left .label {
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .delivery-text {
+      font-size: 0.95rem;
+      color: var(--silver);
+      line-height: 1.7;
+      max-width: 520px;
+    }
+
+    .delivery-text strong {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .delivery-highlight {
+      display: inline;
+      background-image: linear-gradient(90deg, var(--heat), var(--gold));
+      background-repeat: no-repeat;
+      background-size: 100% 1.5px;
+      background-position: 0 100%;
+      padding-bottom: 2px;
+    }
+
+    .delivery-aside-tag {
+      display: inline-block;
+      margin-top: 14px;
+      font-family: var(--pixel);
+      font-size: 0.72rem;
+      color: var(--graphite);
+      letter-spacing: 0.1em;
+      border: 1px solid rgba(135, 135, 135, 0.2);
+      padding: 4px 10px;
+    }
+
+    .delivery-connector {
+      flex-shrink: 0;
+      color: var(--heat);
+      font-family: var(--mono);
+      font-size: 3rem;
+      line-height: 1;
+      opacity: 0.75;
+    }
+
+    .delivery-right {
+      flex-shrink: 0;
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .delivery-service-name {
+      background-image: linear-gradient(90deg, var(--heat), var(--gold));
+      background-repeat: no-repeat;
+      background-size: 0% 1.5px;
+      background-position: 100% 100%;
+      padding-bottom: 2px;
+      transition: background-size 0.4s var(--ease), color 0.3s var(--ease);
+    }
+
+    .delivery-right:hover .delivery-service-name {
+      background-size: 100% 1.5px;
+      color: var(--gold);
+    }
+
+    .delivery-badge {
+      font-family: var(--pixel);
+      font-size: 0.75rem;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+    }
+
+    .delivery-service-name {
+      font-family: var(--mono);
+      font-size: 1.3rem;
+      color: var(--white);
+      line-height: 1.3;
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .delivery-bridge-inner {
+        flex-direction: column;
+        padding: 40px 24px;
+        gap: 28px;
+      }
+      .delivery-connector { display: none; }
+      .delivery-right { align-items: flex-start; text-align: left; }
+    }
+
     /* ══════════════════════════════════
        BLOCO 5 — RESULTADOS
     ══════════════════════════════════ */
@@ -1327,7 +1454,7 @@
     }
 
     .res-success h2 {
-      font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+      font-size: clamp(1.7rem, 2.6vw, 2.2rem);
       margin-bottom: 48px;
     }
 
@@ -1472,16 +1599,22 @@
       z-index: 2;
     }
 
-    /* diagonal heat glow from top-left */
+    /* diagonal heat glow from top-left + mouse spotlight */
     .tcard::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(145deg, rgba(230, 76, 40, 0.055) 0%, transparent 55%);
+      background:
+        radial-gradient(120px circle at var(--cx, 50%) var(--cy, 50%), rgba(230, 76, 40, 0.09), transparent 70%),
+        linear-gradient(145deg, rgba(230, 76, 40, 0.05) 0%, transparent 55%);
       opacity: 0;
       transition: opacity 0.5s var(--ease);
       pointer-events: none;
       z-index: 0;
+    }
+
+    .tcard:hover {
+      background: rgba(230, 76, 40, 0.04);
     }
 
     .tcard:hover::before {
@@ -1836,6 +1969,86 @@
       }
     }
 
+    /* ══════════════════════════════════
+       BLOCO 8 — AGENDA
+    ══════════════════════════════════ */
+    #agenda {
+      background: var(--carbon);
+      border-top: var(--border);
+      position: relative;
+      padding: 120px 60px;
+      overflow: hidden;
+    }
+
+    .agenda-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .agenda-header {
+      margin-bottom: 56px;
+    }
+
+    .agenda-header .label {
+      display: block;
+      margin-bottom: 18px;
+    }
+
+    .agenda-header h2 {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      color: var(--white);
+      max-width: 600px;
+      line-height: 1.2;
+    }
+
+    .agenda-frame-wrap {
+      position: relative;
+      border: var(--border);
+      background: var(--black);
+      overflow: hidden;
+    }
+
+    /* scan-line top */
+    .agenda-frame-wrap::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--heat), var(--gold), transparent);
+      z-index: 2;
+    }
+
+    /* corner brackets */
+    .agenda-frame-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(230, 76, 40, 0.04) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .agenda-frame-wrap iframe {
+      display: block;
+      width: 100%;
+      height: 700px;
+      border: none;
+      position: relative;
+      z-index: 1;
+      filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.95);
+    }
+
+    @media (max-width: 768px) {
+      #agenda {
+        padding: 80px 24px;
+      }
+      .agenda-frame-wrap iframe {
+        height: 900px;
+      }
+    }
+
     /* ══ FOOTER ══ */
     footer {
       background: var(--black);
@@ -2112,7 +2325,7 @@
 <body class="loading">
 
   <!-- LOGO SPRITE — inline para evitar bloqueio de file:// no Chrome -->
-  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
     <defs>
       <linearGradient id="logo-grad-fire" x1="60.472" y1="3.42969" x2="60.472" y2="217.879" gradientUnits="userSpaceOnUse">
         <stop stop-color="#FFB021"/>
@@ -2179,6 +2392,10 @@
     </div>
     <div class="snav-dot" data-target="cta-final">
       <span class="snav-dot__label">Contato</span>
+      <div class="snav-dot__bar"></div>
+    </div>
+    <div class="snav-dot" data-target="agenda">
+      <span class="snav-dot__label">Agenda</span>
       <div class="snav-dot__bar"></div>
     </div>
   </div>
@@ -2438,6 +2655,22 @@
 
   <div class="divider"></div>
 
+  <!-- DELIVERY BRIDGE -->
+  <div class="delivery-bridge">
+    <div class="delivery-bridge-inner reveal">
+      <div class="delivery-left">
+        <span class="label">// OUTPUT: DISCOVERY_CONCLUÍDO</span>
+        <p class="delivery-text"><strong class="delivery-highlight">A Taller também desenvolve o seu MVP.</strong><br>Da validação direto para o código, sem trocar de parceiro no momento mais crítico.</p>
+        <span class="delivery-aside-tag">[ contratação à parte ]</span>
+      </div>
+      <span class="delivery-connector">→</span>
+      <a href="https://tallersite.vercel.app/servicos/desenvolvimento" target="_blank" rel="noopener" class="delivery-right">
+        <span class="delivery-badge">[ NEXT_SERVICE ]</span>
+        <strong class="delivery-service-name">Desenvolvimento<br>de Produto</strong>
+      </a>
+    </div>
+  </div>
+
   <!-- ══════════════════════════════════════
      BLOCO 5 — RESULTADOS
 ══════════════════════════════════════ -->
@@ -2559,16 +2792,32 @@
     </div>
 
     <div class="cta-content">
-      <span class="label reveal">// LAST_CMD: EXECUTE</span>
+      <span class="label reveal">// SYS_PROMPT: HORA_DE_AGIR</span>
       <h2 class="cta-h split-target reveal">
         Bora tomar decisões baseadas em <span class="heat-pulse">evidências?</span>
       </h2>
       <p class="cta-sub reveal line-reveal">
         Agende uma conversa para levar o seu produto para o Laboratório de Inovação.
       </p>
-      <a href="https://cal.com/tallerinnovation" target="_blank" rel="noopener" class="btn btn-primary btn-xl btn-final magnetic" id="finalBtn">
+      <a href="#agenda" class="btn btn-primary btn-xl btn-final magnetic" id="finalBtn">
         falar com especialista →
       </a>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+     BLOCO 8 — AGENDA
+  ══════════════════════════════════════ -->
+  <section id="agenda">
+    <div class="grid-overlay"></div>
+    <div class="agenda-inner">
+      <div class="agenda-header">
+        <span class="label reveal">// LAST_CMD: AGENDAR_SESSÃO</span>
+        <h2 class="reveal">Escolha o melhor horário<br>para sua <span class="heat-pulse">sessão estratégica.</span></h2>
+      </div>
+      <div class="agenda-frame-wrap reveal">
+        <iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3LzjrmBDJ1A49VmzA-CG5_xHIFlij0HuGKVXSJOHfIARGxTkoocU16ONVNkBdkI5ZyPvqYO0GG?gv=true" style="border: 0" width="100%" height="600" frameborder="0" title="Agendar sessão — Taller Innovation" loading="lazy"></iframe>
+      </div>
     </div>
   </section>
 
@@ -2607,8 +2856,8 @@
             const text = child.textContent;
             const words = text.split(/(\s+)/);
             words.forEach(word => {
-              if (/^\s+$/.test(word)) {
-                frag.appendChild(document.createTextNode(word));
+              if (!word || /^\s+$/.test(word)) {
+                if (word) frag.appendChild(document.createTextNode(word));
                 return;
               }
               const wordSpan = document.createElement('span');
@@ -2740,8 +2989,8 @@
 
     /* Section observer for nav bg + section dots */
     const navEl = document.querySelector('nav');
-    const sections = ['hero', 'problema', 'guia', 'plano', 'resultados', 'social', 'cta-final'];
-    const sectionBgs = { hero: 'black', problema: 'carbon', guia: 'black', plano: 'carbon', resultados: 'black', social: 'carbon', 'cta-final': 'black' };
+    const sections = ['hero', 'problema', 'guia', 'plano', 'resultados', 'social', 'cta-final', 'agenda'];
+    const sectionBgs = { hero: 'black', problema: 'carbon', guia: 'black', plano: 'carbon', resultados: 'black', social: 'carbon', 'cta-final': 'black', agenda: 'carbon' };
 
     const sectionObs = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -3006,7 +3255,7 @@
 
     /* Spotlight per-card */
     if (isDesktop && !prefersReducedMotion) {
-      document.querySelectorAll('.bento-card').forEach(card => {
+      document.querySelectorAll('.bento-card, .tcard').forEach(card => {
         card.addEventListener('mousemove', e => {
           const rect = card.getBoundingClientRect();
           card.style.setProperty('--cx', `${e.clientX - rect.left}px`);
@@ -3383,7 +3632,17 @@
         const cur = document.createElement('span');
         cur.className = 'title-cursor';
         cur.textContent = '█';
-        el.appendChild(cur);
+        /* Skip trailing whitespace text nodes so the cursor always sits
+           on the same line as the last word, never below it. */
+        let anchor = el.lastChild;
+        while (anchor && anchor.nodeType === Node.TEXT_NODE && !anchor.textContent.trim()) {
+          anchor = anchor.previousSibling;
+        }
+        if (anchor && anchor.nextSibling) {
+          el.insertBefore(cur, anchor.nextSibling);
+        } else {
+          el.appendChild(cur);
+        }
       });
 
       /* Same rootMargin as sectionObs so cursor tracks active section */
